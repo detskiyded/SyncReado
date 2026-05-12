@@ -1,0 +1,27 @@
+{
+  "name": "syncreado",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:frontend": "cd ./frontend && npm run dev",
+    "dev:backend": "cd ./backend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/detskiyded/SyncReado.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/detskiyded/SyncReado/issues"
+  },
+  "homepage": "https://github.com/detskiyded/SyncReado#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

@@ -36,7 +36,7 @@ function getBookById(req: Request, res: Response) {
   const bookId = req.params.id as string;
   const book = books.find((b) => b.id === bookId);
 
-  if (!book) return res.status(404);
+  if (!book) return res.status(404).json({error: `There is no book with id: ${bookId}`});
 
   res.json(book);
 }

@@ -1,12 +1,19 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express, { Request, Response } from "express";
 import { bookRouter } from "./routes/bookRouter";
+import { authMiddleware } from "./middleware/authMiddleware";
+import { authRouter } from "./routes/authRouter";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use("/books", bookRouter);
-app.use("/books/:id", bookRouter);
+app.use("/auth", authRouter);
+app.use("/auth", authRouter);
+app.use("/books", authMiddleware, bookRouter);
+app.use("/books/:id", authMiddleware, bookRouter);
 
 app.get("/api/health", (req: Request, res: Response) => {
   res.status(200).json({

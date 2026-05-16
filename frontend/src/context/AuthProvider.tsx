@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { AuthContextType, AuthContext } from "./AuthContext";
-import { request } from "../src/utils/api";
+import type AuthContextType from './AuthContext';
+import { AuthContext } from "./AuthContext";
+import { request } from "../utils/api";
 
 interface AuthProviderProps {
   children: React.ReactNode;

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export interface AuthContextType {
+export default interface AuthContextType {
   user: { id: string; email: string } | null;
   token: string | null;
   isLoading: boolean;

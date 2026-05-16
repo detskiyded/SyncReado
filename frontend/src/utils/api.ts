@@ -1,6 +1,9 @@
 export async function request(
   endpoint: string,
-  options?: { method?: "GET" | "POST" | "PUT" | "DELETE"; body: object },
+  options?: {
+    method?: "GET" | "POST" | "PUT" | "DELETE";
+    body: Record<string, unknown> | undefined;
+  },
 ) {
   const token = localStorage.getItem("token");
 

@@ -24,7 +24,7 @@ export function Register() {
 
     try {
       await login(email, password);
-      nav("/books");
+      nav("/dashboard");
     } catch (e: unknown) {
       if (typeof e === "string") setErrorMsg(e);
       else if (e instanceof Error) setErrorMsg(e.message);

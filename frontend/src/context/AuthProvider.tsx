@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type AuthContextType from './AuthContext';
+import type AuthContextType from "./AuthContext";
 import { AuthContext } from "./AuthContext";
 import { request } from "../utils/api";
 

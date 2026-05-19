@@ -36,13 +36,13 @@ export function Register() {
       <form onSubmit={handleSubmit}>
         <input
           value={email}
-          onChange={() => handleEmailChange}
+          onChange={handleEmailChange}
           placeholder="Email"
           required
         ></input>
         <input
           value={password}
-          onChange={() => handlePasswordChange}
+          onChange={handlePasswordChange}
           placeholder="Password"
           required
         ></input>

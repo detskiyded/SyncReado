@@ -47,8 +47,9 @@ async function login(req: Request, res: Response) {
     if (!jwtSecret)
       return res.status(500).json({ error: "JWT secret not configured" });
 
+    const normalizedEmail = req.body.email.toLowerCase().trim();
     const user = await prisma.user.findUnique({
-      where: { email: req.body.email },
+      where: { email: normalizedEmail },
     });
 
     if (!user) {

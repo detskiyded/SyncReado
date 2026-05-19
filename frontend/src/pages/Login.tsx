@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-export function Register() {
+export function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -36,13 +36,13 @@ export function Register() {
       <form onSubmit={handleSubmit}>
         <input
           value={email}
-          onChange={() => handleEmailChange}
+          onChange={handleEmailChange}
           placeholder="Email"
           required
         ></input>
         <input
           value={password}
-          onChange={() => handlePasswordChange}
+          onChange={handlePasswordChange}
           placeholder="Password"
           required
         ></input>

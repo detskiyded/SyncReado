@@ -2,7 +2,7 @@ export async function request(
   endpoint: string,
   options?: {
     method?: "GET" | "POST" | "PUT" | "DELETE";
-    body: Record<string, unknown> | undefined;
+    body?: Record<string, unknown>;
   },
 ) {
   const token = localStorage.getItem("token");

@@ -10,7 +10,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<AuthContextType["user"]>(null);
   const [token, setToken] = useState<AuthContextType["token"]>(() => {
-    if (typeof window !== "undefined") localStorage.getItem("token");
+    if (typeof window !== "undefined") return localStorage.getItem("token");
     return null;
   });
   const [isLoading, setIsLoading] = useState(false);

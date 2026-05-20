@@ -7,7 +7,7 @@ export function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  
+
   const { register, isLoading } = useAuth();
   const nav = useNavigate();
 
@@ -33,28 +33,42 @@ export function Register() {
   }
 
   return (
-<div className="auth-wrapper">
-  <div className="auth-card">
-    <h1 className="auth-title">Регистрация</h1>
-    {errorMsg && <div className="error-message">{errorMsg}</div>}
-    <form onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label className="form-label">Email</label>
-        <input className="form-input" type="email" value={email} onChange={handleEmailChange} required />
+    <div className="auth-wrapper">
+      <div className="auth-card">
+        <h1 className="auth-title">Регистрация</h1>
+        {errorMsg && <div className="error-message">{errorMsg}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              className="form-input"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Пароль</label>
+            <input
+              className="form-input"
+              type="password"
+              value={password}
+              onChange={handlePasswordChange}
+              required
+            />
+          </div>
+          <button className="form-button" type="submit" disabled={isLoading}>
+            {isLoading ? "Загрузка..." : "Зарегистрироваться"}
+          </button>
+        </form>
+        <div className="auth-footer">
+          Уже есть аккаунт?{" "}
+          <Link to="/login" className="auth-link">
+            Войти
+          </Link>
+        </div>
       </div>
-      <div className="form-group">
-        <label className="form-label">Пароль</label>
-        <input className="form-input" type="password" value={password} onChange={handlePasswordChange} required />
-      </div>
-      <button className="form-button" type="submit" disabled={isLoading}>
-        {isLoading ? 'Загрузка...' : 'Зарегистрироваться'}
-      </button>
-    </form>
-    <div className="auth-footer">
-      Уже есть аккаунт? <Link to="/login" className="auth-link">Войти</Link>
     </div>
-  </div>
-</div>
-
   );
 }

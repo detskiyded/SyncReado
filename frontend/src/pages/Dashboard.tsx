@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Dashboard() {
   const { logout } = useAuth();
@@ -7,7 +7,7 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -21,7 +21,9 @@ export default function Dashboard() {
 
       <div className="dashboard-grid">
         <div className="empty-state">
-          <p style={{ fontSize: '18px', marginBottom: '8px' }}>📚 Пока нет книг</p>
+          <p style={{ fontSize: "18px", marginBottom: "8px" }}>
+            📚 Пока нет книг
+          </p>
           <p style={{ opacity: 0.6 }}>
             Загрузка PDF и управление библиотекой появятся на следующем этапе
           </p>

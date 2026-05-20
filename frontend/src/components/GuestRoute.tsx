@@ -1,16 +1,16 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
-interface GuestRouteProps{
+interface GuestRouteProps {
   children: React.ReactNode;
 }
 
-export function GuestRoute({children} : GuestRouteProps){
-  const {token, isLoading} = useAuth();
-  
-  if (isLoading) return <></>
+export function GuestRoute({ children }: GuestRouteProps) {
+  const { token, isLoading } = useAuth();
 
-  if (token) return <Navigate to="/dashboard" replace/>
+  if (isLoading) return <></>;
 
-  return <>{children}</>
+  if (token) return <Navigate to="/dashboard" replace />;
+
+  return <>{children}</>;
 }

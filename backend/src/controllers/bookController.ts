@@ -1,47 +1,71 @@
-import { Response, Request } from "express";
-import { Book } from "../types/book";
+import { Response, Request, NextFunction } from "express";
+import { prisma } from '../db/client';
 
-const books: Book[] = [
-  {
-    id: "1",
-    title: "Smth 1",
-    author: "I. D. Kno",
-    createdAt: "2026-05-10",
-  },
-  {
-    id: "2",
-    title: "Smth 2",
-    author: "I. D. Kno",
-    createdAt: "2026-05-11",
-  },
-  {
-    id: "3",
-    title: "Nothing 1",
-    author: "I. D. Kno",
-    createdAt: "2026-05-10",
-  },
-  {
-    id: "4",
-    title: "Nothing 2",
-    author: "I. D. Kno",
-    createdAt: "2026-05-11",
-  },
-];
+import { JwtPayload } from 'jsonwebtoken';
 
-function getAllBooks(req: Request, res: Response) {
-  res.json(books);
+export interface AuthRequest extends Request {
+  user?: JwtPayload & { userId: string };
 }
 
-function getBookById(req: Request, res: Response) {
-  const bookId = req.params.id as string;
-  const book = books.find((b) => b.id === bookId);
+async function createBook(req: AuthRequest, res: Response, next: NextFunction){
+  if (!req.file){
+    return res.status(400).json({error: 'Файл не загружен'});
+  }
 
-  if (!book)
-    return res
-      .status(404)
-      .json({ error: `There is no book with id: ${bookId}` });
+  if (!req.user){
+    return res.status(409).json({error: 'Требуется авторизация'});
+  }
 
-  res.json(book);
+  const userId = req.user.userId;
+
+  const {title, author} = req.body;
+  const pdfUrl = req.file.path;
+
+  const book = await prisma.book.create({
+    data: {
+      title,
+      author,
+      pdfUrl,
+      owner : {connect: {id: userId}}
+    }
+  })
+
+  return res.status(201).json({
+    message: 'Книга успешно создана',
+    book: {book}
+  })
 }
 
-export { getAllBooks, getBookById };
+async function getUserBooks(req: AuthRequest, res: Response, next: NextFunction){
+  if (!req.user){ return res.status(409).json({error: 'Требуется авторизация'})}
+
+  const books = await prisma.book.findMany(
+    {where: {ownerId: req.user.id}}
+  )
+
+  return res.status(200).json({
+    books: {books}
+  })
+}
+
+async function deleteBook(req: AuthRequest, res: Response, next: NextFunction){
+  if (!req.user) {return res.status(409).json({error: 'Требуется авторизация'});}
+
+  const id = req.params.id as string;
+
+  const book = await prisma.book.findUnique({
+    where: {id}
+  })
+
+  if (!book) {return res.status(404).json({error: 'Книга не найдена'});}
+
+  if (book.ownerId !== req.user.userId) {return res.status(403).json({error: 'Не создатель'});}
+  
+  await prisma.book.delete({
+    where: {id}
+  });
+
+  return res.status(200).json({message: 'Книга удалена'});
+}
+
+export {createBook, getUserBooks, deleteBook}

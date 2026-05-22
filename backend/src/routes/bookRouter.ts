@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { getAllBooks, getBookById } from "../controllers/bookController";
+import { createBook, getUserBooks, deleteBook } from "../controllers/bookController";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { uploadBookPdf } from "../middleware/upload";
 
 const bookRouter = Router();
 
-bookRouter.get("/", getAllBooks);
+bookRouter.post('/', authMiddleware, uploadBookPdf, createBook);
 
-bookRouter.get("/:id", getBookById);
+bookRouter.get('/', authMiddleware, getUserBooks);
+
+bookRouter.delete('/:id', authMiddleware, deleteBook);
 
 export { bookRouter };

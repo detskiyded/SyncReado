@@ -2,20 +2,24 @@ export async function request(
   endpoint: string,
   options?: {
     method?: "GET" | "POST" | "PUT" | "DELETE";
-    body?: Record<string, unknown>;
+    body?: Record<string, unknown> | FormData;
   },
 ) {
   const token = localStorage.getItem("token");
+  const headers: Record<string, string> = {};
 
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
+  const isFormData = options?.body instanceof FormData;
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
 
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const body =
     options?.body && options.method !== "GET"
-      ? JSON.stringify(options.body)
+      ? isFormData
+        ? (options.body as FormData)
+        : JSON.stringify(options.body)
       : undefined;
 
   const response = await fetch(`http://localhost:3000${endpoint}`, {

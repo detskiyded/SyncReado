@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { GuestRoute } from "./components/GuestRoute";
 import { UploadBook } from "./pages/UploadBook";
+import { Reader } from "./pages/Reader";
 
 function App() {
   return (
@@ -44,6 +45,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/reader" element={<Reader/>}/>
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 

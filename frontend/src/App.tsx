@@ -40,7 +40,7 @@ function App() {
           path="/upload"
           element={
             <ProtectedRoute>
-              <UploadBook/>
+              <UploadBook />
             </ProtectedRoute>
           }
         />

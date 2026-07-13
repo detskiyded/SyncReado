@@ -47,9 +47,7 @@ async function getUserBooks(
 
   const books = await prisma.book.findMany({ where: { ownerId: req.user.id } });
 
-  return res.status(200).json({
-    books: { books },
-  });
+  return res.status(200).json(books);
 }
 
 async function deleteBook(req: AuthRequest, res: Response, next: NextFunction) {

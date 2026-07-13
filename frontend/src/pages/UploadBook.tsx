@@ -89,7 +89,7 @@ export function UploadBook() {
         {errorMsg && <div className="error-message">{errorMsg}</div>}
 
         {/* Кнопка отправки */}
-        <button type="submit" disabled={isLoading} className="submit-button">
+        <button type="submit" disabled={isLoading} className="btn-primary">
           {isLoading ? "Загрузка..." : "Загрузить книгу"}
         </button>
       </form>

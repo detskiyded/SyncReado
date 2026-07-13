@@ -1,177 +1,48 @@
+/* ============================================
+   🎨 ГЛОБАЛЬНЫЕ СТИЛИ И ПЕРЕМЕННЫЕ
+   ============================================ */
 :root {
-  /* Твоя палитра */
-  --color-cream: #fbf5dd;
-  --color-sand: #e7e1b1;
-  --color-green: #306d29;
-  --color-dark-green: #0d530e;
-
-  /* Настройка переменных для UI */
-  --bg-primary: var(--color-cream);
-  --bg-surface: var(--color-sand);
-  --bg-surface-hover: #ddd5a0; /* Чуть темнее песочного при наведении */
-
-  --text-primary: var(--color-dark-green);
-  --text-secondary: var(--color-green);
-
-  --accent: var(--color-green);
-  --accent-hover: var(--color-dark-green);
-  --accent-text: var(--color-cream); /* Текст на кнопках */
-
-  --border: var(--color-sand);
-  --error: #b91c1c; /* Красный (оставим для ошибок) */
-
-  --radius: 12px; /* Чуть более мягкие углы для "книжного" стиля */
-  --shadow: 0 4px 20px rgba(13, 83, 14, 0.1); /* Тень с оттенком зелени */
-  --transition: 0.2s ease;
+  --primary-color: #ffc81e;
+  --primary-hover: #e7b41b;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --success-color: #10b981;
+  --bg-color: #fefddf;
+  --card-bg: #ffffff;
+  --text-primary: #e87f24;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
 }
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  /* Рекомендую добавить шрифт с засечками для заголовков, если есть возможность */
   font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
-  background: var(--bg-primary);
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  background-color: var(--bg-color);
   color: var(--text-primary);
   line-height: 1.6;
-  min-height: 100vh;
 }
 
-/* ─── Авторизация ─── */
-.auth-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: radial-gradient(
-    circle at center,
-    #fffdf0,
-    var(--bg-primary)
-  ); /* Легкий виньетка */
-}
-
-.auth-card {
-  background: var(--bg-surface);
-  border: 1px solid transparent;
-  border-radius: var(--radius);
-  padding: 40px 32px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: var(--shadow);
-}
-
-.auth-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 30px;
-  text-align: center;
-  /* Если есть подключенный шрифт с засечками (например, Merriweather), примени его сюда */
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-label {
-  display: block;
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 16px;
-  background: rgba(251, 245, 221, 0.6); /* Полупрозрачный крем */
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text-primary);
-  font-size: 16px;
-  transition: all var(--transition);
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(48, 109, 41, 0.15);
-}
-
-.form-button {
-  width: 100%;
-  padding: 14px;
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
-  border-radius: var(--radius);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background var(--transition),
-    transform 0.1s;
-  margin-top: 10px;
-}
-
-.form-button:hover:not(:disabled) {
-  background: var(--accent-hover);
-}
-.form-button:active:not(:disabled) {
-  transform: scale(0.98);
-}
-.form-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.auth-footer {
-  margin-top: 24px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.auth-link {
-  color: var(--text-primary);
-  text-decoration: none;
-  font-weight: 600;
-  border-bottom: 1px solid transparent;
-}
-.auth-link:hover {
-  border-bottom-color: var(--text-primary);
-}
-
-/* ─── Ошибки ─── */
-.error-message {
-  background: rgba(185, 28, 28, 0.05);
-  border: 1px solid rgba(185, 28, 28, 0.2);
-  color: var(--error);
-  padding: 12px;
-  border-radius: var(--radius);
-  font-size: 14px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* ─── Dashboard ─── */
+/* ============================================
+   📊 DASHBOARD LAYOUT
+   ============================================ */
 .dashboard-layout {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 40px 20px;
+  min-height: 100vh;
 }
 
 .dashboard-header {
@@ -179,106 +50,180 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .dashboard-title {
-  font-size: 32px;
+  font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.025em;
 }
 
-.logout-button {
-  padding: 10px 20px;
-  background: transparent;
-  border: 2px solid var(--border);
-  color: var(--text-secondary);
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all var(--transition);
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-.logout-button:hover {
-  border-color: var(--error);
-  color: var(--error);
-  background: rgba(185, 28, 28, 0.05);
-}
-
+/* ============================================
+   📚 DASHBOARD GRID
+   ============================================ */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
+  padding: 20px 0;
 }
 
+/* ============================================
+    BOOK CARD
+   ============================================ */
 .book-card {
-  background: var(--bg-surface);
-  border: 1px solid rgba(48, 109, 41, 0.1);
-  border-radius: var(--radius);
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
   padding: 24px;
-  transition: all var(--transition);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.book-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity var(--transition);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .book-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow);
-  background: #fdf9ea; /* Чуть светлее при наведении */
+  box-shadow: var(--shadow-lg);
 }
 
-.book-card:hover::before {
-  opacity: 1;
-}
-
-.book-title {
-  font-size: 18px;
-  font-weight: 700;
+.book-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  line-height: 1.4;
+  margin: 0;
 }
 
-.book-author {
-  font-size: 14px;
+.book-card p {
   color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
 }
 
-.empty-state {
-  grid-column: 1 / -1;
+.book-card-actions {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  color: var(--text-secondary);
-  background: var(--bg-surface);
-  border-radius: var(--radius);
-  border: 2px dashed var(--border);
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 16px;
 }
 
+/* ============================================
+   🔘 BUTTONS
+   ============================================ */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:disabled {
+  background-color: var(--text-secondary);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-hover);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-color);
+  border-color: var(--text-secondary);
+}
+
+/* ============================================
+   🚀 LOGOUT BUTTON
+   ============================================ */
+.logout-button {
+  background-color: transparent;
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: var(--danger-color);
+  color: white;
+  border-color: var(--danger-color);
+}
+
+/* ============================================
+    UPLOAD FORM
+   ============================================ */
 .upload-book-container {
   max-width: 600px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 40px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.upload-book-container h1 {
+  font-size: 2rem;
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--text-primary);
 }
 
 .upload-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .form-group {
@@ -287,38 +232,260 @@ body {
   gap: 8px;
 }
 
+.form-group label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
 .form-input {
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: white;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-input:disabled {
+  background-color: var(--bg-color);
+  cursor: not-allowed;
+}
+
+input[type="file"] {
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.file-info {
-  color: #28a745;
-  font-size: 14px;
-  margin-top: 5px;
-}
-
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px solid #f5c6cb;
-}
-
-.submit-button {
-  padding: 12px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
   cursor: pointer;
 }
 
-.submit-button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+.file-info {
+  color: var(--success-color);
+  font-size: 0.9rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ============================================
+    LOADER
+   ============================================ */
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.loader::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   ❌ ERROR STATE
+   ============================================ */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 20px;
+  text-align: center;
+}
+
+.error-container p {
+  font-size: 1.2rem;
+  color: var(--danger-color);
+  font-weight: 500;
+}
+
+.error-message {
+  background-color: #fef2f2;
+  color: var(--danger-color);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid #fecaca;
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   📭 EMPTY STATE
+   ============================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 24px;
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-state h2 {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* ============================================
+    READER (для будущих задач)
+   ============================================ */
+.reader-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.reader-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.reader-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.page-counter {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 100px;
+  text-align: center;
+}
+
+.pdf-viewer {
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ============================================
+   🔖 BOOKMARKS (для будущих задач)
+   ============================================ */
+.bookmark-sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-lg);
+  padding: 24px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.bookmark-sidebar.open {
+  transform: translateX(0);
+}
+
+.bookmark-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.bookmark-item {
+  padding: 12px;
+  background: var(--bg-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bookmark-item:hover {
+  background: var(--border-color);
+}
+
+/* ============================================
+   📱 RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-book-container {
+    margin: 20px;
+    padding: 24px;
+  }
+
+  .book-card-actions {
+    flex-direction: column;
+  }
+
+  .reader-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bookmark-sidebar {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   🎯 UTILITY CLASSES
+   ============================================ */
+.text-center {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.hidden {
+  display: none;
 }

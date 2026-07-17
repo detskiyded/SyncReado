@@ -50,6 +50,29 @@ async function getUserBooks(
   return res.status(200).json(books);
 }
 
+async function getBookById(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const id = req.params.id as string;
+    const book = await prisma.book.findUnique({ where: { id } });
+
+    if (!book) {
+      return res.status(404).json({ error: "Книга не найдена" });
+    }
+
+    // Опционально: проверка владельца
+    if (book.ownerId !== req.user?.userId) {
+      return res.status(403).json({ error: "Доступ запрещён" });
+    }
+
+    res.status(200).json(book);
+  } catch (error) {
+    next(error);
+  }
+}
 async function deleteBook(req: AuthRequest, res: Response, next: NextFunction) {
   if (!req.user) {
     return res.status(409).json({ error: "Требуется авторизация" });
@@ -76,4 +99,4 @@ async function deleteBook(req: AuthRequest, res: Response, next: NextFunction) {
   return res.status(200).json({ message: "Книга удалена" });
 }
 
-export { createBook, getUserBooks, deleteBook };
+export { createBook, getUserBooks, deleteBook, getBookById };

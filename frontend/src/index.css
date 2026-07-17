@@ -556,13 +556,15 @@ input[type="file"] {
   background-color: var(--color-white);
   margin: 0 auto;
   /* Адаптивность: на мобильных меньше отступы */
-  max-width: 100%; 
+  max-width: 100%;
 }
 
 /* Эффект при наведении на страницу (опционально) */
 .react-pdf__Page:hover {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 /* ============================================
@@ -574,13 +576,50 @@ input[type="file"] {
     gap: 12px;
     text-align: center;
   }
-  
+
   .reader-title {
     width: 100%;
     text-align: center;
   }
-  
+
   .pdf-wrapper {
     padding: 20px 10px;
   }
+}
+
+.page-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.page-number-input {
+  width: 60px;
+  padding: 6px 8px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background-color: white;
+}
+
+.page-number-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.page-number-input:disabled {
+  background-color: var(--bg-color);
+  cursor: not-allowed;
+}
+
+.page-separator {
+  color: var(--color-text-secondary);
+}
+
+.total-pages {
+  color: var(--color-text-secondary);
 }

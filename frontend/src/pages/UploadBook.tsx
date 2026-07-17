@@ -37,6 +37,10 @@ export function UploadBook() {
 
   return (
     <div className="upload-book-container">
+      <button className="btn-secondary" onClick={() => nav("/dashboard")}>
+        К книгам
+      </button>
+
       <h1>Загрузить книгу</h1>
 
       <form onSubmit={handleSubmit} className="upload-form">

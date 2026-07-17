@@ -46,7 +46,14 @@ function App() {
           }
         />
 
-        <Route path="/reader" element={<Reader/>}/>
+        <Route
+          path="/reader/:bookId"
+          element={
+            <ProtectedRoute>
+              <Reader />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 

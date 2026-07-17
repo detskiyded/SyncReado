@@ -52,7 +52,7 @@ export default function Dashboard() {
     }
   }
 
-    return (
+  return (
     <div className="dashboard-layout">
       {/* 🟢 Хедер рендерится ВСЕГДА, независимо от состояния книг */}
       <div className="dashboard-header">
@@ -73,7 +73,10 @@ export default function Dashboard() {
       ) : errorMsg ? (
         <div className="error-container">
           <p> {errorMsg}</p>
-          <button className="btn-secondary" onClick={() => window.location.reload()}>
+          <button
+            className="btn-secondary"
+            onClick={() => window.location.reload()}
+          >
             Попробовать снова
           </button>
         </div>
@@ -98,4 +101,5 @@ export default function Dashboard() {
         </div>
       )}
     </div>
-  )}
+  );
+}

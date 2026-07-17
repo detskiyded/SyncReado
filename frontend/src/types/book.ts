@@ -3,4 +3,5 @@ export interface Book {
   title: string;
   author: string;
   createdAt: string;
+  pdfUrl: string;
 }

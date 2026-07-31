@@ -568,8 +568,161 @@ input[type="file"] {
 }
 
 /* ============================================
+   🔐 AUTH PAGES (Login / Register)
+   ============================================ */
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-cream);
+  padding: 20px;
+}
+
+.auth-card {
+  background-color: var(--color-white);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(115, 165, 202, 0.15);
+}
+
+.auth-title {
+  text-align: center;
+  color: var(--color-orange);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
+}
+
+/* Форма */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: var(--color-white);
+  color: var(--color-text-main);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 3px rgba(115, 165, 202, 0.2);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-light);
+}
+
+/* Кнопка */
+.form-button {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--primary-color);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.form-button:hover:not(:disabled) {
+  background-color: #d66f15;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(232, 127, 36, 0.3);
+}
+
+.form-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.form-button:disabled {
+  background-color: var(--color-text-light);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Сообщение об ошибке */
+.error-message {
+  background-color: #fef2f2;
+  color: var(--color-danger);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Подвал формы */
+.auth-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.auth-link {
+  color: var(--color-blue);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+  color: var(--color-orange);
+  text-decoration: underline;
+}
+
+/* ============================================
    📱 RESPONSIVE
    ============================================ */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 20px;
+    border-radius: 12px;
+  }
+
+  .auth-title {
+    font-size: 1.6rem;
+    margin-bottom: 24px;
+  }
+
+  .form-input {
+    padding: 10px 14px;
+  }
+
+  .form-button {
+    padding: 12px;
+  }
+}
+
 @media (max-width: 768px) {
   .reader-header {
     flex-direction: column;

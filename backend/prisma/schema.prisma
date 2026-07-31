@@ -19,6 +19,7 @@ model User{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   books Book[]
+  progresses ReadingProgress[]
 }
 
 model Book{
@@ -29,4 +30,19 @@ model Book{
   owner User @relation(fields: [ownerId], references: [id])
   ownerId String
   createdAt DateTime @default(now())
+  progresses ReadingProgress[]
+}
+
+model ReadingProgress{
+  id String @id @default(uuid())
+
+  userId String 
+  bookId String
+
+  user User @relation(fields: [userId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+
+  currentPage Int @default(1)
+  updatedAt DateTime @updatedAt
+  @@unique([userId, bookId])
 }

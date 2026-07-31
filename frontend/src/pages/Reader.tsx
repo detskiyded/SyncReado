@@ -7,6 +7,7 @@ import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
+import { useRef } from "react";
 import type { OnItemClickArgs } from "react-pdf/src/shared/types.js";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -21,7 +22,9 @@ export function Reader() {
   const [inputPage, setInputPage] = useState<string>("1");
 
   const navigate = useNavigate();
-  const { bookId } = useParams<{ bookId: string }>(); // ✅ Деструктуризация
+  const { bookId } = useParams<{ bookId: string }>(); // Деструктуризация
+
+  const timeRef = useRef<number | null>(null);
 
   // Загрузка данных книги
   useEffect(() => {
@@ -31,19 +34,47 @@ export function Reader() {
         if (book?.pdfUrl) {
           setBookTitle(book.title);
           setFileUrl(`http://localhost:3000/${book.pdfUrl}`);
+
+          // Подгрузка прогресса
+          const { currentPage } = await request(`/books/${bookId}/progress`);
+          setPageNumber(currentPage);
+          setInputPage(currentPage);
         }
       } catch (err: unknown) {
         const message =
           err instanceof Error ? err.message : "Не удалось загрузить книгу";
         setErrorMsg(message);
-        console.log(message);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (bookId) fetchBookData();
+
+    return () => {
+      if (timeRef.current){
+        clearTimeout(timeRef.current);
+      }
+    }
   }, [bookId]);
+
+  async function saveProgressDelayed(newPageNumber: number) {
+    if (timeRef.current) {
+      clearTimeout(timeRef.current);
+    }
+
+    timeRef.current = setTimeout(async () => {
+      try {
+        await request(`/books/${bookId}/progress`, {
+          method: "POST",
+          body: { currentPage: newPageNumber },
+        });
+      } catch (err) {
+        // Ошибку просто логируем, чтобы не ломать чтение
+        console.error("Не удалось сохранить прогресс:", err);
+      }
+    }, 2000); // 2 секунды задержка
+  }
 
   function handlePageInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
@@ -55,6 +86,8 @@ export function Reader() {
     if (!isNaN(pageNum) && numPages && pageNum >= 1 && pageNum <= numPages) {
       setPageNumber(pageNum);
     }
+
+    saveProgressDelayed(pageNum);
   }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
@@ -69,11 +102,13 @@ export function Reader() {
   function handlePrevPage() {
     if (pageNumber > 1) setPageNumber((prev) => prev - 1);
     setInputPage((pageNumber - 1).toString());
+    saveProgressDelayed(pageNumber - 1);
   }
 
   function handleNextPage() {
     if (numPages && pageNumber < numPages) setPageNumber((prev) => prev + 1);
     setInputPage((pageNumber + 1).toString());
+    saveProgressDelayed(pageNumber + 1);
   }
 
   function onDocumentClick(onDocProps: OnItemClickArgs) {
@@ -83,7 +118,6 @@ export function Reader() {
 
   return (
     <div className="reader-container">
-      {/* Шапка — видна всегда */}
       <div className="reader-header">
         <button
           className="btn-secondary"

@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import { prisma } from "../db/client";
+import * as fs from 'fs';
 
 import { JwtPayload } from "jsonwebtoken";
 
@@ -91,6 +92,10 @@ async function deleteBook(req: AuthRequest, res: Response, next: NextFunction) {
   if (book.ownerId !== req.user.userId) {
     return res.status(403).json({ error: "Не создатель" });
   }
+
+  await prisma.readingProgress.deleteMany({where: {bookId: id}});
+
+  fs.unlinkSync(book.pdfUrl);
 
   await prisma.book.delete({
     where: { id },

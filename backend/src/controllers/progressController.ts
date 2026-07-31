@@ -16,10 +16,9 @@ async function setProgress(
   const userId = req.user?.userId;
   const { currentPage } = req.body;
 
-  if (!userId){
-    return res.status(401).json({error: 'Auth needed!'});
+  if (!userId) {
+    return res.status(401).json({ error: "Auth needed!" });
   }
-
 
   await prisma.readingProgress.upsert({
     where: {
@@ -42,21 +41,21 @@ async function getProgress(
   res: Response,
   next: NextFunction,
 ) {
-  const {bookId} = req.params as {bookId: string};
+  const { bookId } = req.params as { bookId: string };
   const userId = req.user?.userId;
-  
+
   const progress = await prisma.readingProgress.findFirst({
     where: {
       userId: userId,
-      bookId: bookId
-    }
-  })
+      bookId: bookId,
+    },
+  });
 
-  if (!progress){
-    return res.status(200).json({currentPage: 1});
+  if (!progress) {
+    return res.status(200).json({ currentPage: 1 });
   }
 
   return res.status(200).json(progress);
 }
 
-export {setProgress, getProgress}
+export { setProgress, getProgress };

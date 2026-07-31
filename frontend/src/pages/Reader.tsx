@@ -52,10 +52,10 @@ export function Reader() {
     if (bookId) fetchBookData();
 
     return () => {
-      if (timeRef.current){
+      if (timeRef.current) {
         clearTimeout(timeRef.current);
       }
-    }
+    };
   }, [bookId]);
 
   async function saveProgressDelayed(newPageNumber: number) {

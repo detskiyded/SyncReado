@@ -10,12 +10,12 @@ import { uploadBookPdf } from "../middleware/upload";
 
 const bookRouter = Router();
 
-bookRouter.post("/", authMiddleware, uploadBookPdf, createBook);
+bookRouter.post("/", uploadBookPdf, createBook);
 
-bookRouter.get("/", authMiddleware, getUserBooks);
+bookRouter.get("/", getUserBooks);
 
-bookRouter.get("/:id", authMiddleware, getBookById);
+bookRouter.get("/:id", getBookById);
 
-bookRouter.delete("/:id", authMiddleware, deleteBook);
+bookRouter.delete("/:id", deleteBook);
 
 export { bookRouter };

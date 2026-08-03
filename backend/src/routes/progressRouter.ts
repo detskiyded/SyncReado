@@ -4,8 +4,8 @@ import { authMiddleware } from "../middleware/authMiddleware";
 
 const progressRouter = Router();
 
-progressRouter.get("/:id/progress", authMiddleware, getProgress);
+progressRouter.get("/:id/progress", getProgress);
 
-progressRouter.post("/:id/progress", authMiddleware, setProgress);
+progressRouter.post("/:id/progress", setProgress);
 
 export { progressRouter };

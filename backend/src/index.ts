@@ -8,6 +8,7 @@ import { authMiddleware } from "./middleware/authMiddleware";
 import { authRouter } from "./routes/authRouter";
 import { progressRouter } from "./routes/progressRouter";
 import * as path from "node:path";
+import { bookmarkRouter } from "./routes/bookmarkRouter";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,8 +21,9 @@ app.use(
 );
 app.use(express.json());
 
+
 app.use("/auth", authRouter);
-app.use("/auth", authRouter);
+app.use("/books/:bookId/bookmarks", authMiddleware, bookmarkRouter);
 app.use("/books", authMiddleware, bookRouter);
 app.use("/books", authMiddleware, progressRouter);
 

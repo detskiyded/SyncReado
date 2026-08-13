@@ -1,8 +1,9 @@
 import { Response, Request, NextFunction } from "express";
 import { prisma } from "../db/client";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 import { JwtPayload } from "jsonwebtoken";
+import path from "path";
 
 export interface AuthRequest extends Request {
   user?: JwtPayload & { userId: string };
@@ -94,8 +95,14 @@ async function deleteBook(req: AuthRequest, res: Response, next: NextFunction) {
   }
 
   await prisma.readingProgress.deleteMany({ where: { bookId: id } });
+  await prisma.bookmark.deleteMany({where: {bookId: id}});
 
-  fs.unlinkSync(book.pdfUrl);
+  const filePath = path.join(__dirname, '../../', book.pdfUrl);
+  try{
+    await fs.rm(filePath, {force: true});
+  } catch(fileError){
+    console.warn('Не удалось удалить физический файл: ', fileError);
+  }
 
   await prisma.book.delete({
     where: { id },

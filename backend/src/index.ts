@@ -24,8 +24,8 @@ app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use("/books/:bookId/bookmarks", authMiddleware, bookmarkRouter);
-app.use("/books", authMiddleware, bookRouter);
 app.use("/books", authMiddleware, progressRouter);
+app.use("/books", authMiddleware, bookRouter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 

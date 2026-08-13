@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -6,6 +6,16 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { GuestRoute } from "./components/GuestRoute";
 import { UploadBook } from "./pages/UploadBook";
 import { Reader } from "./pages/Reader";
+
+function ReaderRoute(){
+  const {bookId} = useParams<{bookId: string}>();
+
+  return (
+  <>
+    <Reader
+    key={bookId}/>
+  </>)
+}
 
 function App() {
   return (
@@ -50,7 +60,7 @@ function App() {
           path="/reader/:bookId"
           element={
             <ProtectedRoute>
-              <Reader />
+              <ReaderRoute/>
             </ProtectedRoute>
           }
         />

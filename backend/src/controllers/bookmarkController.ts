@@ -16,8 +16,8 @@ async function addBookmark(
     return res.status(400).json({ err: "Некорректный номер страницы" });
   }
 
-  if (note.length > 100){
-    return res.status(400).json({err: 'Некорректный размер заметки'})
+  if (note.length > 100) {
+    return res.status(400).json({ err: "Некорректный размер заметки" });
   }
 
   const newBookmark = await prisma.bookmark.create({
@@ -48,25 +48,29 @@ async function getBookmarks(
   return res.status(200).json(foundBookmarks);
 }
 
-async function deleteBookmark(req: AuthRequest, res: Response, next: NextFunction) {
+async function deleteBookmark(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) {
   const bookmarkId = req.params.id as string;
   const userId = req.user?.userId;
 
   const bookmark = await prisma.bookmark.findUnique({
-    where: {id: bookmarkId}
+    where: { id: bookmarkId },
   });
 
   if (!bookmark) {
-    return res.status(404).json({err: 'Нет такой закладки'});
+    return res.status(404).json({ err: "Нет такой закладки" });
   }
 
   if (bookmark.userId !== userId) {
-    return res.status(403).json({err: 'Не создатель'});
+    return res.status(403).json({ err: "Не создатель" });
   }
 
-  await prisma.bookmark.delete({where: {id: bookmarkId}});
+  await prisma.bookmark.delete({ where: { id: bookmarkId } });
 
-  return res.status(200).json({message: 'Закладка удалена'});
+  return res.status(200).json({ message: "Закладка удалена" });
 }
 
-export {addBookmark, getBookmarks, deleteBookmark}
+export { addBookmark, getBookmarks, deleteBookmark };

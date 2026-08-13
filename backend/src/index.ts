@@ -21,7 +21,6 @@ app.use(
 );
 app.use(express.json());
 
-
 app.use("/auth", authRouter);
 app.use("/books/:bookId/bookmarks", authMiddleware, bookmarkRouter);
 app.use("/books", authMiddleware, progressRouter);

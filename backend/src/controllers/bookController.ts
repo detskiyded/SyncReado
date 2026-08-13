@@ -95,13 +95,13 @@ async function deleteBook(req: AuthRequest, res: Response, next: NextFunction) {
   }
 
   await prisma.readingProgress.deleteMany({ where: { bookId: id } });
-  await prisma.bookmark.deleteMany({where: {bookId: id}});
+  await prisma.bookmark.deleteMany({ where: { bookId: id } });
 
-  const filePath = path.join(__dirname, '../../', book.pdfUrl);
-  try{
-    await fs.rm(filePath, {force: true});
-  } catch(fileError){
-    console.warn('Не удалось удалить физический файл: ', fileError);
+  const filePath = path.join(__dirname, "../../", book.pdfUrl);
+  try {
+    await fs.rm(filePath, { force: true });
+  } catch (fileError) {
+    console.warn("Не удалось удалить физический файл: ", fileError);
   }
 
   await prisma.book.delete({

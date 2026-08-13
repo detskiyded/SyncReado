@@ -43,7 +43,7 @@ async function getProgress(
   res: Response,
   next: NextFunction,
 ) {
-  const { id } = req.params as {id: string};
+  const { id } = req.params as { id: string };
   const userId = req.user?.userId;
 
   const progress = await prisma.readingProgress.findFirst({

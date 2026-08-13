@@ -289,9 +289,9 @@ export function Reader() {
           // TODO: здесь будет логика удаления (DELETE запрос)
           setBookmarks((prev) => prev.filter((b) => b.id !== id));
 
-          await request(`/books/${bookId}/bookmarks/${id}`,
-            {method: 'DELETE'}
-          )
+          await request(`/books/${bookId}/bookmarks/${id}`, {
+            method: "DELETE",
+          });
         }}
       />
 

@@ -60,7 +60,9 @@ export function BookmarkSidebar({
                   📄 Страница {bookmark.pageNumber}
                 </span>
                 {bookmark.note && (
-                  <span className="bookmark-note line-clamp-3">{bookmark.note}</span>
+                  <span className="bookmark-note line-clamp-3">
+                    {bookmark.note}
+                  </span>
                 )}
                 <span className="bookmark-date">
                   {formatDate(bookmark.createdAt)}

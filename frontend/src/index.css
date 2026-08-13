@@ -989,7 +989,6 @@ input[type="file"] {
   }
 }
 
-
 /* ============================================
 🪟 MODAL (Всплывающие окна)
 ============================================ */
@@ -1023,7 +1022,7 @@ input[type="file"] {
 .modal-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--color-text-main, #2D3748);
+  color: var(--color-text-main, #2d3748);
   margin-bottom: 20px;
   border-bottom: 1px solid var(--border-color, #e5e7eb);
   padding-bottom: 12px;
@@ -1031,11 +1030,21 @@ input[type="file"] {
 
 /* Анимации для плавного появления */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

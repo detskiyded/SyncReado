@@ -77,7 +77,7 @@ model Friendship {
   id String @id @default(uuid())
   
   requesterId String
-  adresseeId String
+  addresseeId String
 
   status FriendshipStatus @default(PENDING)
   
@@ -85,7 +85,7 @@ model Friendship {
   updatedAt DateTime @updatedAt
 
   requester User @relation("SentRequests", fields: [requesterId], references: [id], onDelete: Cascade)
-  adressee User @relation("ReceivedRequests", fields: [adresseeId], references: [id], onDelete: Cascade)
+  addressee User @relation("ReceivedRequests", fields: [addresseeId], references: [id], onDelete: Cascade)
 
-  @@unique([requesterId, adresseeId])
+  @@unique([requesterId, addresseeId])
 }

@@ -16,7 +16,7 @@ async function addBookmark(
     return res.status(400).json({ err: "Некорректный номер страницы" });
   }
 
-  if (note.length > 100) {
+  if (note && note.length > 100) {
     return res.status(400).json({ err: "Некорректный размер заметки" });
   }
 

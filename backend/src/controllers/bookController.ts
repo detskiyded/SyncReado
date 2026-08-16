@@ -47,7 +47,7 @@ async function getUserBooks(
     return res.status(409).json({ error: "Требуется авторизация" });
   }
 
-  const books = await prisma.book.findMany({ where: { ownerId: req.user.id } });
+  const books = await prisma.book.findMany({ where: { ownerId: req.user.userId } });
 
   return res.status(200).json(books);
 }

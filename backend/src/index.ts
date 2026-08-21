@@ -10,6 +10,7 @@ import { progressRouter } from "./routes/progressRouter";
 import * as path from "node:path";
 import { bookmarkRouter } from "./routes/bookmarkRouter";
 import { friendRouter } from "./routes/friendRouter";
+import { userRouter } from "./routes/userRouter";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ app.use("/books/:bookId/bookmarks", authMiddleware, bookmarkRouter);
 app.use("/books", authMiddleware, progressRouter);
 app.use("/books", authMiddleware, bookRouter);
 app.use("/friends", authMiddleware, friendRouter);
+app.use("/users", authMiddleware, userRouter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 

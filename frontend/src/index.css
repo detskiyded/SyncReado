@@ -1,23 +1,59 @@
 /* ============================================
-   🎨 ГЛОБАЛЬНЫЕ СТИЛИ И ПЕРЕМЕННЫЕ
+   🔤 ПОДКЛЮЧЕНИЕ ШРИФТОВ
+   ============================================ */
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap");
+
+/* ============================================
+   🎨 ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ (палитра «Библиотека»)
    ============================================ */
 :root {
-  --primary-color: #ffc81e;
-  --primary-hover: #e7b41b;
-  --danger-color: #ef4444;
-  --danger-hover: #dc2626;
-  --success-color: #10b981;
-  --bg-color: #fefddf;
-  --card-bg: #ffffff;
-  --text-primary: #e87f24;
-  --text-secondary: #6b7280;
-  --border-color: #e5e7eb;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  /* Основная палитра */
+  --color-paper: #f6f3ec; /* фон страницы — тёплая бумага */
+  --color-card: #ffffff; /* фон карточек */
+  --color-primary: #1e4d3b; /* лесной зелёный */
+  --color-primary-hover: #16382b; /* темнее при наведении */
+  --color-accent: #c9a227; /* античное золото */
+  --color-secondary: #4a7a6f; /* приглушённый зелёно-синий */
+
+  /* Текст */
+  --color-text-main: #23281f; /* тёплый графит */
+  --color-text-light: #77806f; /* серо-оливковый */
+  --color-text-secondary: #77806f;
+
+  /* Функциональные */
+  --color-danger: #b54a3f; /* терракота */
+  --color-danger-hover: #9a3d33;
+  --color-success: #3e7c5b;
+
+  /* Служебные */
+  --border-color: #e5e0d3;
+  --shadow-sm: 0 1px 2px 0 rgb(35 40 31 / 0.05);
+  --shadow-md: 0 4px 10px -2px rgb(35 40 31 / 0.08);
+  --shadow-lg: 0 12px 24px -6px rgb(35 40 31 / 0.14);
   --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Шрифты */
+  --font-serif: "Lora", Georgia, serif;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Алиасы для старых классов */
+  --color-cream: var(--color-paper);
+  --color-white: var(--color-card);
+  --color-orange: var(--color-primary);
+  --color-blue: var(--color-secondary);
+  --color-yellow: var(--color-accent);
+  --primary-color: var(--color-primary);
+  --primary-hover: var(--color-primary-hover);
+  --danger-color: var(--color-danger);
+  --danger-hover: var(--color-danger-hover);
+  --success-color: var(--color-success);
+  --bg-color: var(--color-paper);
+  --card-bg: var(--color-card);
+  --text-primary: var(--color-text-main);
+  --text-secondary: var(--color-text-secondary);
 }
 
 * {
@@ -27,12 +63,27 @@
 }
 
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-primary);
+  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-text-main);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Книжные заголовки с засечками */
+h1,
+h2,
+h3,
+.dashboard-title,
+.auth-title,
+.upload-book-container h1,
+.bookmark-sidebar-title,
+.modal-title,
+.reader-title,
+.book-card h3,
+.empty-state h2 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.01em;
 }
 
 /* ============================================
@@ -57,8 +108,7 @@ body {
 .dashboard-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.025em;
+  color: var(--color-primary);
 }
 
 .header-actions {
@@ -78,15 +128,16 @@ body {
 }
 
 /* ============================================
-    BOOK CARD
+   📖 BOOK CARD
    ============================================ */
 .book-card {
-  background: var(--card-bg);
+  background: var(--color-card);
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
   border: 1px solid var(--border-color);
+  border-top: 3px solid var(--color-primary);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -95,20 +146,19 @@ body {
 .book-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+  border-top-color: var(--color-accent);
 }
 
 .book-card h3 {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text-main);
   line-height: 1.4;
-  margin: 0;
 }
 
 .book-card p {
-  color: var(--text-secondary);
+  color: var(--color-text-light);
   font-size: 0.95rem;
-  margin: 0;
 }
 
 .book-card-actions {
@@ -122,13 +172,14 @@ body {
    🔘 BUTTONS
    ============================================ */
 .btn-primary {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: var(--color-primary);
+  color: #fff;
   padding: 10px 20px;
   border: none;
   border-radius: var(--radius-md);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
@@ -137,20 +188,20 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
+  background-color: var(--color-primary-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .btn-primary:disabled {
-  background-color: var(--text-secondary);
+  background-color: var(--color-text-light);
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-danger {
-  background-color: var(--danger-color);
-  color: white;
+  background-color: var(--color-danger);
+  color: #fff;
   padding: 8px 16px;
   border: none;
   border-radius: var(--radius-md);
@@ -161,24 +212,24 @@ body {
 }
 
 .btn-danger:hover {
-  background-color: var(--danger-hover);
+  background-color: var(--color-danger-hover);
 }
 
 .btn-secondary {
-  background-color: white;
-  color: var(--text-primary);
+  background-color: var(--color-card);
+  color: var(--color-primary);
   padding: 8px 16px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-primary);
   border-radius: var(--radius-md);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
-  background-color: var(--bg-color);
-  border-color: var(--text-secondary);
+  background-color: var(--color-primary);
+  color: #fff;
 }
 
 /* ============================================
@@ -186,7 +237,7 @@ body {
    ============================================ */
 .logout-button {
   background-color: transparent;
-  color: var(--text-secondary);
+  color: var(--color-text-light);
   padding: 8px 16px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
@@ -196,28 +247,29 @@ body {
 }
 
 .logout-button:hover {
-  background-color: var(--danger-color);
-  color: white;
-  border-color: var(--danger-color);
+  background-color: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger);
 }
 
 /* ============================================
-    UPLOAD FORM
+   📤 UPLOAD FORM
    ============================================ */
 .upload-book-container {
   max-width: 600px;
   margin: 40px auto;
   padding: 40px;
-  background: var(--card-bg);
+  background: var(--color-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  border-top: 3px solid var(--color-primary);
 }
 
 .upload-book-container h1 {
   font-size: 2rem;
   margin-bottom: 32px;
   text-align: center;
-  color: var(--text-primary);
+  color: var(--color-primary);
 }
 
 .upload-form {
@@ -234,7 +286,7 @@ body {
 
 .form-group label {
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text-main);
   font-size: 0.95rem;
 }
 
@@ -243,18 +295,20 @@ body {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   font-size: 1rem;
+  font-family: var(--font-sans);
   transition: all 0.2s ease;
-  background-color: white;
+  background-color: var(--color-card);
+  color: var(--color-text-main);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(30 77 59 / 0.12);
 }
 
 .form-input:disabled {
-  background-color: var(--bg-color);
+  background-color: var(--color-paper);
   cursor: not-allowed;
 }
 
@@ -264,14 +318,14 @@ input[type="file"] {
 }
 
 .file-info {
-  color: var(--success-color);
+  color: var(--color-success);
   font-size: 0.9rem;
   margin-top: 4px;
   font-weight: 500;
 }
 
 /* ============================================
-    LOADER
+   ⏳ LOADER
    ============================================ */
 .loader {
   display: flex;
@@ -279,7 +333,7 @@ input[type="file"] {
   align-items: center;
   min-height: 400px;
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--color-text-light);
 }
 
 .loader::before {
@@ -288,7 +342,7 @@ input[type="file"] {
   height: 40px;
   margin-right: 12px;
   border: 4px solid var(--border-color);
-  border-top-color: var(--primary-color);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -314,16 +368,16 @@ input[type="file"] {
 
 .error-container p {
   font-size: 1.2rem;
-  color: var(--danger-color);
+  color: var(--color-danger);
   font-weight: 500;
 }
 
 .error-message {
-  background-color: #fef2f2;
-  color: var(--danger-color);
+  background-color: #fbeeec;
+  color: var(--color-danger);
   padding: 12px 16px;
   border-radius: var(--radius-md);
-  border: 1px solid #fecaca;
+  border: 1px solid #ebd0cc;
   font-size: 0.95rem;
 }
 
@@ -342,18 +396,18 @@ input[type="file"] {
 }
 
 .empty-state h2 {
-  font-size: 1.5rem;
-  color: var(--text-secondary);
-  font-weight: 500;
+  font-size: 1.6rem;
+  color: var(--color-primary);
+  font-weight: 600;
 }
 
 .empty-state p {
-  color: var(--text-secondary);
+  color: var(--color-text-light);
   font-size: 1.1rem;
 }
 
 /* ============================================
-    READER (для будущих задач)
+   📖 READER (базовые)
    ============================================ */
 .reader-container {
   max-width: 1000px;
@@ -367,7 +421,7 @@ input[type="file"] {
   align-items: center;
   margin-bottom: 20px;
   padding: 16px;
-  background: var(--card-bg);
+  background: var(--color-card);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
 }
@@ -380,13 +434,13 @@ input[type="file"] {
 
 .page-counter {
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-text-main);
   min-width: 100px;
   text-align: center;
 }
 
 .pdf-viewer {
-  background: var(--card-bg);
+  background: var(--color-card);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   padding: 20px;
@@ -395,7 +449,114 @@ input[type="file"] {
 }
 
 /* ============================================
-   🔖 BOOKMARKS (для будущих задач)
+   📖 READER LAYOUT (расширенный)
+   ============================================ */
+.reader-container {
+  background-color: var(--color-paper);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reader-header {
+  width: 100%;
+  padding: 16px 24px;
+  background-color: var(--color-card);
+  box-shadow: 0 2px 10px rgb(35 40 31 / 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.reader-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50%;
+}
+
+.page-counter {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 80px;
+  text-align: center;
+}
+
+.pdf-wrapper {
+  padding: 40px 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Страница PDF — эффект бумаги на столе */
+.react-pdf__Page {
+  box-shadow: 0 10px 30px rgb(35 40 31 / 0.18);
+  background-color: var(--color-card);
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.react-pdf__Page:hover {
+  box-shadow: 0 14px 40px rgb(35 40 31 / 0.22);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* ============================================
+   📄 PAGE INPUT (выбор страницы)
+   ============================================ */
+.page-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.page-number-input {
+  width: 60px;
+  padding: 6px 8px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  background-color: var(--color-card);
+  color: var(--color-text-main);
+}
+
+.page-number-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgb(30 77 59 / 0.12);
+}
+
+.page-number-input:disabled {
+  background-color: var(--color-paper);
+  cursor: not-allowed;
+}
+
+.page-separator {
+  color: var(--color-text-secondary);
+}
+
+.total-pages {
+  color: var(--color-text-secondary);
+}
+
+/* ============================================
+   🔖 BOOKMARKS (базовые)
    ============================================ */
 .bookmark-sidebar {
   position: fixed;
@@ -403,7 +564,7 @@ input[type="file"] {
   top: 0;
   width: 300px;
   height: 100vh;
-  background: var(--card-bg);
+  background: var(--color-card);
   box-shadow: var(--shadow-lg);
   padding: 24px;
   overflow-y: auto;
@@ -424,7 +585,7 @@ input[type="file"] {
 
 .bookmark-item {
   padding: 12px;
-  background: var(--bg-color);
+  background: var(--color-paper);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -432,6 +593,353 @@ input[type="file"] {
 
 .bookmark-item:hover {
   background: var(--border-color);
+}
+
+/* ============================================
+   🔖 BOOKMARK SIDEBAR (расширенный)
+   ============================================ */
+.bookmark-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(35 40 31 / 0.35);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.bookmark-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bookmark-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  height: 100vh;
+  background-color: var(--color-card);
+  box-shadow: -4px 0 20px rgb(35 40 31 / 0.12);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookmark-sidebar.open {
+  transform: translateX(0);
+}
+
+.bookmark-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 2px solid var(--color-paper);
+  background-color: var(--color-card);
+}
+
+.bookmark-sidebar-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.bookmark-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-text-light);
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.bookmark-close-btn:hover {
+  background-color: var(--color-paper);
+  color: var(--color-primary);
+}
+
+.bookmark-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.bookmark-empty p:first-child {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.bookmark-empty-hint {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  line-height: 1.5;
+}
+
+.bookmark-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bookmark-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: var(--color-paper);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.bookmark-item:hover {
+  background-color: #efeae0;
+  transform: translateX(-4px);
+}
+
+.bookmark-item.active {
+  border-left-color: var(--color-accent);
+  background-color: #f1ecdf;
+}
+
+.bookmark-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bookmark-page {
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+}
+
+.bookmark-note {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.bookmark-date {
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+}
+
+.bookmark-delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 6px;
+  border-radius: 6px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bookmark-note.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bookmark-item:hover .bookmark-note.line-clamp-3 {
+  -webkit-line-clamp: unset;
+  display: block;
+  overflow: visible;
+}
+
+.bookmark-item:hover .bookmark-delete-btn {
+  opacity: 1;
+}
+
+.bookmark-delete-btn:hover {
+  background-color: rgb(181 74 63 / 0.12);
+}
+
+/* ============================================
+   🔐 AUTH PAGES (Login / Register)
+   ============================================ */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-paper);
+  padding: 20px;
+}
+
+.auth-card {
+  background-color: var(--color-card);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+  border-top: 3px solid var(--color-primary);
+}
+
+.auth-title {
+  text-align: center;
+  color: var(--color-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+}
+
+.form-input::placeholder {
+  color: var(--color-text-light);
+}
+
+.form-button {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.form-button:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(30 77 59 / 0.3);
+}
+
+.form-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.form-button:disabled {
+  background-color: var(--color-text-light);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+}
+
+.auth-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* ============================================
+   🪟 MODAL
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(35 40 31 / 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content {
+  background-color: var(--color-card);
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px rgb(35 40 31 / 0.25);
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  border-top: 3px solid var(--color-accent);
+}
+
+.modal-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* ============================================
@@ -469,240 +977,23 @@ input[type="file"] {
   .bookmark-sidebar {
     width: 100%;
   }
+
+  .reader-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .reader-title {
+    width: 100%;
+    text-align: center;
+  }
+
+  .pdf-wrapper {
+    padding: 20px 10px;
+  }
 }
 
-/* ============================================
-   🎯 UTILITY CLASSES
-   ============================================ */
-.text-center {
-  text-align: center;
-}
-
-.mt-4 {
-  margin-top: 16px;
-}
-
-.mb-4 {
-  margin-bottom: 16px;
-}
-
-.hidden {
-  display: none;
-}
-
-/* ============================================
-   📖 READER LAYOUT
-   ============================================ */
-
-/* 1. Основной фон приложения (Кремовый) */
-.reader-container {
-  background-color: var(--color-cream); /* #FEFDDF */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* 2. Верхняя панель (Навигация) */
-.reader-header {
-  width: 100%;
-  padding: 16px 24px;
-  background-color: var(--color-white);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Легкая тень снизу */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky; /* Панель всегда сверху при скролле */
-  top: 0;
-  z-index: 100;
-}
-
-.reader-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-text-main);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 50%;
-}
-
-.reader-controls {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.page-counter {
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  min-width: 80px;
-  text-align: center;
-}
-
-/* 3. Контейнер для PDF (Отступы и центрирование) */
-.pdf-wrapper {
-  padding: 40px 20px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-/* 4. САМА СТРАНИЦА PDF (Эффект бумаги) */
-.react-pdf__Page {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Глубокая тень */
-  background-color: var(--color-white);
-  margin: 0 auto;
-  /* Адаптивность: на мобильных меньше отступы */
-  max-width: 100%;
-}
-
-/* Эффект при наведении на страницу (опционально) */
-.react-pdf__Page:hover {
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-/* ============================================
-   🔐 AUTH PAGES (Login / Register)
-   ============================================ */
-
-.auth-wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--color-cream);
-  padding: 20px;
-}
-
-.auth-card {
-  background-color: var(--color-white);
-  border-radius: 16px;
-  padding: 40px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(115, 165, 202, 0.15);
-}
-
-.auth-title {
-  text-align: center;
-  color: var(--color-orange);
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 32px;
-  letter-spacing: -0.02em;
-}
-
-/* Форма */
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--color-text-main);
-  font-size: 0.95rem;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: var(--color-white);
-  color: var(--color-text-main);
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--color-blue);
-  box-shadow: 0 0 0 3px rgba(115, 165, 202, 0.2);
-}
-
-.form-input::placeholder {
-  color: var(--color-text-light);
-}
-
-/* Кнопка */
-.form-button {
-  width: 100%;
-  padding: 14px;
-  background-color: var(--primary-color);
-  color: rgb(255, 255, 255);
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 8px;
-}
-
-.form-button:hover:not(:disabled) {
-  background-color: #d66f15;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(232, 127, 36, 0.3);
-}
-
-.form-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.form-button:disabled {
-  background-color: var(--color-text-light);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* Сообщение об ошибке */
-.error-message {
-  background-color: #fef2f2;
-  color: var(--color-danger);
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px solid #fecaca;
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Подвал формы */
-.auth-footer {
-  text-align: center;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
-  color: var(--color-text-secondary);
-  font-size: 0.95rem;
-}
-
-.auth-link {
-  color: var(--color-blue);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.auth-link:hover {
-  color: var(--color-orange);
-  text-decoration: underline;
-}
-
-/* ============================================
-   📱 RESPONSIVE
-   ============================================ */
 @media (max-width: 480px) {
   .auth-card {
     padding: 28px 20px;
@@ -723,328 +1014,215 @@ input[type="file"] {
   }
 }
 
-@media (max-width: 768px) {
-  .reader-header {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-  }
-
-  .reader-title {
-    width: 100%;
-    text-align: center;
-  }
-
-  .pdf-wrapper {
-    padding: 20px 10px;
-  }
-}
-
-.page-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-}
-
-.page-number-input {
-  width: 60px;
-  padding: 6px 8px;
+/* ============================================
+   🎯 UTILITY CLASSES
+   ============================================ */
+.text-center {
   text-align: center;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  background-color: white;
 }
-
-.page-number-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+.mt-4 {
+  margin-top: 16px;
 }
-
-.page-number-input:disabled {
-  background-color: var(--bg-color);
-  cursor: not-allowed;
+.mb-4 {
+  margin-bottom: 16px;
 }
-
-.page-separator {
-  color: var(--color-text-secondary);
-}
-
-.total-pages {
-  color: var(--color-text-secondary);
+.hidden {
+  display: none;
 }
 
 /* ============================================
-🔖 BOOKMARK SIDEBAR
+🧭 APP LAYOUT (общая навигация)
 ============================================ */
-
-/* Оверлей при открытом сайдбаре (опционально) */
-.bookmark-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 199;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.bookmark-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Сам сайдбар */
-.bookmark-sidebar {
-  position: fixed;
+.app-header {
+  position: sticky;
   top: 0;
-  right: 0;
-  width: 320px;
-  height: 100vh;
-  background-color: var(--color-white, #ffffff);
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
   z-index: 200;
   display: flex;
-  flex-direction: column;
-}
-
-.bookmark-sidebar.open {
-  transform: translateX(0);
-}
-
-/* Шапка сайдбара */
-.bookmark-sidebar-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  border-bottom: 2px solid var(--color-cream, #fefddf);
+  gap: 24px;
+  padding: 12px 24px;
   background-color: var(--color-white, #ffffff);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
-.bookmark-sidebar-title {
-  font-size: 1.3rem;
-  font-weight: 700;
+.app-logo {
+  font-size: 1.4rem;
+  font-weight: 800;
   color: var(--color-orange, #e87f24);
-  margin: 0;
+  text-decoration: none;
+  letter-spacing: -0.02em;
 }
 
-.bookmark-close-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: var(--color-text-light, #718096);
-  padding: 8px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.bookmark-close-btn:hover {
-  background-color: var(--color-cream, #fefddf);
-  color: var(--color-orange, #e87f24);
-}
-
-/* Пустое состояние */
-.bookmark-empty {
-  flex: 1;
+.app-nav {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 8px;
+  margin-right: auto;
+}
+
+.nav-link {
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: var(--color-text-main, #2d3748);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(115, 165, 202, 0.15);
+}
+
+.nav-link.active {
+  background: var(--color-orange, #e87f24);
+  color: #ffffff;
+}
+
+.header-actions {
+  display: flex;
   align-items: center;
-  padding: 40px 20px;
-  text-align: center;
   gap: 12px;
+  margin-left: auto;
 }
 
-.bookmark-empty p:first-child {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-text-main, #2d3748);
-}
-
-.bookmark-empty-hint {
-  font-size: 0.9rem;
-  color: var(--color-text-light, #718096);
-  line-height: 1.5;
-}
-
-/* Список закладок */
-.bookmark-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Элемент закладки */
-.bookmark-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  background-color: var(--color-cream, #fefddf);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-left: 4px solid transparent;
-
-  overflow: hidden;
-  min-width: 0;
-}
-
-.bookmark-item:hover {
-  background-color: #fdf5d0;
-  transform: translateX(-4px);
-}
-
-/* Активная закладка (текущая страница) */
-.bookmark-item.active {
-  border-left-color: var(--color-orange, #e87f24);
-  background-color: #fdf0d5;
-}
-
-.bookmark-item-content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 0;
-}
-
-.bookmark-page {
-  font-weight: 600;
-  color: var(--color-text-main, #2d3748);
-  font-size: 0.95rem;
-}
-
-.bookmark-note {
-  font-size: 0.85rem;
-  color: var(--color-text-light, #718096);
-  font-style: italic;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  width: 100%;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  min-width: 0;
-}
-
-.bookmark-date {
-  font-size: 0.75rem;
-  color: var(--color-blue, #73a5ca);
-}
-
-/* Кнопка удаления */
-.bookmark-delete-btn {
+.burger-button {
+  display: none;
   background: transparent;
   border: none;
+  font-size: 1.4rem;
   cursor: pointer;
-  font-size: 1rem;
-  padding: 6px;
-  border-radius: 6px;
-  opacity: 0.5;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  color: var(--color-text-main, #2d3748);
+  padding: 4px 8px;
 }
 
-/* Обрезка заметки до 3 строк по умолчанию */
-.bookmark-note.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.app-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px;
 }
 
-/* При наведении на карточку закладки — раскрываем полный текст */
-.bookmark-item:hover .bookmark-note.line-clamp-3 {
-  -webkit-line-clamp: unset;
-  display: block;
-  overflow: visible;
+/* Дашборд теперь живёт внутри app-content — убираем двойные отступы */
+.dashboard-layout {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-height: auto;
 }
 
-.bookmark-item:hover .bookmark-delete-btn {
-  opacity: 1;
-}
-
-.bookmark-delete-btn:hover {
-  background-color: rgba(229, 62, 62, 0.1);
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .bookmark-sidebar {
-    width: 100%;
-  }
-}
-
-/* ============================================
-🪟 MODAL (Всплывающие окна)
-============================================ */
-.modal-overlay {
+/* Мобильное меню */
+.mobile-menu-overlay {
   position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 300;
+}
+
+.mobile-menu {
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Затемнение фона */
+  background: var(--color-white, #ffffff);
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Поверх всего, включая сайдбар и хедер */
-  animation: fadeIn 0.2s ease-in-out;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: slideDown 0.25s ease;
 }
 
-.modal-content {
-  background-color: var(--color-white, #ffffff);
-  padding: 28px;
-  border-radius: 12px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 500px;
-  max-height: 85vh;
-  overflow-y: auto;
-  position: relative;
-  animation: slideUp 0.3s ease-out;
-}
-
-.modal-title {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--color-text-main, #2d3748);
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
-  padding-bottom: 12px;
-}
-
-/* Анимации для плавного появления */
-@keyframes fadeIn {
+@keyframes slideDown {
   from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
+    transform: translateY(-20px);
     opacity: 0;
   }
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+/* Страницы-заглушки */
+.stub-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-light, #718096);
+}
+
+/* ============================================
+📱 RESPONSIVE
+============================================ */
+@media (max-width: 768px) {
+  .app-nav {
+    display: none;
+  }
+  .burger-button {
+    display: block;
+  }
+  .header-actions .btn-primary,
+  .header-actions .logout-button {
+    display: none;
+  }
+  .app-content {
+    padding: 16px 12px;
+  }
+}
+
+/* ============================================
+📱 КОМПАКТНАЯ ШАПКА РИДЕРА (мобильные)
+============================================ */
+
+@media (max-width: 768px) {
+  /* Шапка: две тонкие строки вместо колонки */
+  .reader-header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  /* Кнопки — только иконки */
+  .btn-label {
+    display: none;
+  }
+
+  .reader-header .btn-secondary {
+    padding: 6px 10px;
+    font-size: 1rem;
+  }
+
+  /* Название занимает остаток строки, режется многоточием */
+  .reader-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Контролы страниц — вторая строка, по центру */
+  .reader-controls {
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* Минимальные отступы вокруг PDF */
+  .pdf-wrapper {
+    padding: 12px 8px;
   }
 }

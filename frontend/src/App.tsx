@@ -1,76 +1,47 @@
-import { Navigate, Route, Routes, useParams } from "react-router-dom";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { GuestRoute } from "./components/GuestRoute";
+import { Layout } from "./components/Layout";
+import { Login } from "./pages/Login"; // если у тебя default — замени на `import Login from ...`
+import { Register } from "./pages/Register"; // то же самое
+import { Dashboard } from "./pages/Dashboard";
 import { UploadBook } from "./pages/UploadBook";
 import { Reader } from "./pages/Reader";
+import { Friends } from "./pages/Friends";
+import { Rooms } from "./pages/Rooms";
 
-function ReaderRoute(){
-  const {bookId} = useParams<{bookId: string}>();
-
+export default function App() {
   return (
-  <>
-    <Reader
-    key={bookId}/>
-  </>)
-}
+    <Routes>
+      {/* Публичные */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-function App() {
-  return (
-    <>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <GuestRoute>
-              <Login />
-            </GuestRoute>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <GuestRoute>
-              <Register />
-            </GuestRoute>
-          }
-        />
+      {/* Защищённые с общей навигацией */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/upload" element={<UploadBook />} />
+        <Route path="/friends" element={<Friends />} />
+        <Route path="/rooms" element={<Rooms />} />
+      </Route>
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+      {/* Ридер - иммерсивный */}
+      <Route
+        path="/reader/:bookId"
+        element={
+          <ProtectedRoute>
+            <Reader />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/upload"
-          element={
-            <ProtectedRoute>
-              <UploadBook />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/reader/:bookId"
-          element={
-            <ProtectedRoute>
-              <ReaderRoute/>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
-    </>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   );
 }
-
-export default App;

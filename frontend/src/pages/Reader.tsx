@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { request } from "../utils/api";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,6 @@ import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { useRef } from "react";
 import type { OnItemClickArgs } from "react-pdf/src/shared/types.js";
 import type { Bookmark } from "../types/bookmark";
 import { BookmarkSidebar } from "../components/BookmarkSidebar";
@@ -30,12 +29,38 @@ export function Reader() {
   const [isNoteModalOpen, setIsNoteModalOpen] = useState<boolean>(false);
   const [noteDraft, setNoteDraft] = useState<string>("");
 
+  // 🆕 Адаптивная ширина страницы
+  const [pageWidth, setPageWidth] = useState<number>(600);
+  const pdfWrapperRef = useRef<HTMLDivElement | null>(null);
+
   const navigate = useNavigate();
-  const { bookId } = useParams<{ bookId: string }>(); // Деструктуризация
+  const { bookId } = useParams<{ bookId: string }>();
 
   const timeRef = useRef<number | null>(null);
 
-  // Загрузка данных книги
+  // 🆕 Пересчёт ширины при монтировании и при ресайзе окна
+// Пересчёт ширины при монтировании и при ресайзе окна
+useEffect(() => {
+  function updatePageWidth() {
+    const wrapper = pdfWrapperRef.current;
+    if (!wrapper) return;
+
+    // Берём ФАКТИЧЕСКИЕ горизонтальные паддинги обёртки,
+    // а не хардкод: на мобильном это 8px по бокам, на десктопе 20px
+    const styles = window.getComputedStyle(wrapper);
+    const horizontalPadding =
+     parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight);
+
+    const available = wrapper.clientWidth - horizontalPadding;
+    setPageWidth(Math.max(280, Math.min(available, 900)));
+   }
+
+    updatePageWidth();
+    window.addEventListener("resize", updatePageWidth);
+    return () => window.removeEventListener("resize", updatePageWidth);
+  }, []);
+
+  // Загрузка данных книги + прогресса
   useEffect(() => {
     const fetchBookData = async () => {
       try {
@@ -44,10 +69,9 @@ export function Reader() {
           setBookTitle(book.title);
           setFileUrl(`http://localhost:3000/${book.pdfUrl}`);
 
-          // Подгрузка прогресса
           const { currentPage } = await request(`/books/${bookId}/progress`);
           setPageNumber(currentPage);
-          setInputPage(currentPage);
+          setInputPage(String(currentPage));
         }
       } catch (err: unknown) {
         const message =
@@ -71,16 +95,16 @@ export function Reader() {
   useEffect(() => {
     const fetchBookmarkData = async () => {
       try {
-        const bookmarks = (await request(
+        const data = (await request(
           `/books/${bookId}/bookmarks`,
         )) as Bookmark[];
-        if (bookmarks) {
-          setBookmarks(bookmarks);
+        if (data) {
+          setBookmarks(data);
         }
       } catch (err: unknown) {
         const message =
           err instanceof Error ? err.message : "Не удалось загрузить закладки";
-        setErrorMsg(message);
+        console.error(message);
       }
     };
     if (bookId) fetchBookmarkData();
@@ -98,10 +122,9 @@ export function Reader() {
           body: { currentPage: newPageNumber },
         });
       } catch (err) {
-        // Ошибку просто логируем, чтобы не ломать чтение
         console.error("Не удалось сохранить прогресс:", err);
       }
-    }, 2000); // 2 секунды задержка
+    }, 2000);
   }
 
   function handlePageInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -110,12 +133,10 @@ export function Reader() {
 
     const pageNum = parseInt(value, 10);
 
-    // Проверяем, что число валидно и в пределах диапазона
     if (!isNaN(pageNum) && numPages && pageNum >= 1 && pageNum <= numPages) {
       setPageNumber(pageNum);
+      saveProgressDelayed(pageNum);
     }
-
-    saveProgressDelayed(pageNum);
   }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
@@ -128,15 +149,19 @@ export function Reader() {
   }
 
   function handlePrevPage() {
-    if (pageNumber > 1) setPageNumber((prev) => prev - 1);
-    setInputPage((pageNumber - 1).toString());
-    saveProgressDelayed(pageNumber - 1);
+    if (pageNumber > 1) {
+      setPageNumber((prev) => prev - 1);
+      setInputPage((pageNumber - 1).toString());
+      saveProgressDelayed(pageNumber - 1);
+    }
   }
 
   function handleNextPage() {
-    if (numPages && pageNumber < numPages) setPageNumber((prev) => prev + 1);
-    setInputPage((pageNumber + 1).toString());
-    saveProgressDelayed(pageNumber + 1);
+    if (numPages && pageNumber < numPages) {
+      setPageNumber((prev) => prev + 1);
+      setInputPage((pageNumber + 1).toString());
+      saveProgressDelayed(pageNumber + 1);
+    }
   }
 
   function onDocumentClick(onDocProps: OnItemClickArgs) {
@@ -145,39 +170,31 @@ export function Reader() {
   }
 
   async function handleAddBookmark() {
-    // 1. Защита от дублей: проверяем, есть ли уже закладка на текущей странице
     const existingBookmark = bookmarks.find((b) => b.pageNumber === pageNumber);
     if (existingBookmark) {
       alert("На этой странице уже есть закладка");
       return;
     }
 
-    // 2. Блокируем кнопку во время запроса
     setIsAddingBookmark(true);
 
     try {
-      // 3. Отправляем POST запрос на бэкенд
       const newBookmark = await request(`/books/${bookId}/bookmarks`, {
         method: "POST",
         body: {
           pageNumber: pageNumber,
-          note: noteDraft || null, // если заметка пустая, отправляем null
+          note: noteDraft || null,
         },
       });
 
-      // 4. При успехе: добавляем закладку в стейт
       setBookmarks((prev) => [newBookmark, ...prev]);
-
-      // 5. Закрываем модалку и очищаем поле заметки
       setIsNoteModalOpen(false);
       setNoteDraft("");
     } catch (err: unknown) {
-      // 6. При ошибке: показываем сообщение
       const message =
         err instanceof Error ? err.message : "Не удалось добавить закладку";
       alert(message);
     } finally {
-      // 7. Разблокируем кнопку в любом случае
       setIsAddingBookmark(false);
     }
   }
@@ -189,21 +206,21 @@ export function Reader() {
           className="btn-secondary"
           onClick={() => navigate("/dashboard")}
         >
-          ← Назад
+          ← <span className="btn-label">Назад</span>
         </button>
 
         <button
           className="btn-secondary"
           onClick={() => setIsSidebarOpen((prev) => !prev)}
         >
-          🔖 Закладки
+          🔖 <span className="btn-label">Закладки</span>
         </button>
 
         <button
           className="btn-secondary"
           onClick={() => setIsNoteModalOpen(true)}
         >
-          Добавить 🔖
+          + 🔖
         </button>
 
         <div className="reader-title">{bookTitle}</div>
@@ -214,10 +231,9 @@ export function Reader() {
             onClick={handlePrevPage}
             disabled={pageNumber <= 1 || isLoading}
           >
-            ← Пред.
+            ← <span className="btn-label">Пред.</span>
           </button>
 
-          {/* Поле ввода страницы */}
           <div className="page-input-wrapper">
             <input
               type="number"
@@ -237,12 +253,13 @@ export function Reader() {
             onClick={handleNextPage}
             disabled={!numPages || pageNumber >= numPages || isLoading}
           >
-            След. →
+            <span className="btn-label">След.</span> →
           </button>
         </div>
       </div>
-      {/* Контент — условный рендеринг внутри одного блока */}
-      <div className="pdf-wrapper">
+
+      {/* 🆕 ref для измерения ширины */}
+      <div className="pdf-wrapper" ref={pdfWrapperRef}>
         {isLoading ? (
           <div className="loader">Загружаем книгу...</div>
         ) : errorMsg ? (
@@ -264,8 +281,7 @@ export function Reader() {
           >
             <Page
               pageNumber={pageNumber}
-              width={Math.min(600, window.innerWidth - 40)}
-              height={window.innerHeight}
+              width={pageWidth}
               renderTextLayer={true}
             />
           </Document>
@@ -275,6 +291,7 @@ export function Reader() {
           </div>
         )}
       </div>
+
       <BookmarkSidebar
         bookmarks={bookmarks}
         isOpen={isSidebarOpen}
@@ -285,17 +302,11 @@ export function Reader() {
           setInputPage(page.toString());
           setIsSidebarOpen(false);
         }}
-        onBookmarkDelete={async (id) => {
-          // TODO: здесь будет логика удаления (DELETE запрос)
+        onBookmarkDelete={(id) => {
           setBookmarks((prev) => prev.filter((b) => b.id !== id));
-
-          await request(`/books/${bookId}/bookmarks/${id}`, {
-            method: "DELETE",
-          });
         }}
       />
 
-      {/* Модальное окно для добавления закладки */}
       <Modal
         isOpen={isNoteModalOpen}
         onClose={() => setIsNoteModalOpen(false)}
@@ -310,7 +321,7 @@ export function Reader() {
             onChange={(e) => setNoteDraft(e.target.value)}
             placeholder="Например: самый интересный момент в главе"
             rows={3}
-            maxLength={100}
+            maxLength={250}
             style={{ resize: "vertical" }}
           />
         </div>

@@ -1162,6 +1162,258 @@ input[type="file"] {
 }
 
 /* ============================================
+👥 FRIENDS LAYOUT
+============================================ */
+.friends-layout {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.friends-header {
+  margin-bottom: 32px;
+}
+
+.friends-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================================
+📑 TABS (Вкладки)
+============================================ */
+.friends-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid rgba(115, 165, 202, 0.2); /* Легкая голубая линия */
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.friends-tab {
+  background: transparent;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  margin-bottom: -2px; /* Чтобы нижняя граница перекрывала линию вкладок */
+}
+
+.friends-tab:hover {
+  color: var(--primary);
+}
+
+.friends-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-badge {
+  background-color: var(--color-yellow); /* Жёлтый акцент из палитры */
+  color: var(--color-text-main);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ============================================
+📋 FRIENDS LIST & CARDS
+============================================ */
+.friends-content {
+  margin-top: 16px;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.friend-card {
+  background-color: var(--bg-card);
+  border: 1px solid rgba(115, 165, 202, 0.15);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.friend-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.friend-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.friend-avatar {
+  font-size: 1.8rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-cream); /* Кремовый фон для эмодзи */
+  border-radius: 50%;
+}
+
+.friend-email {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.friend-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.request-status {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  font-style: italic;
+  background-color: var(--color-cream);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* ============================================
+🔍 SEARCH
+============================================ */
+.friends-search {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.search-form {
+  display: flex;
+  gap: 12px;
+}
+
+.search-form .form-input {
+  flex: 1;
+}
+
+/* ============================================
+🚨 TOAST / УГЛОВОЕ УВЕДОМЛЕНИЕ ОБ ОШИБКЕ
+============================================ */
+.error-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background-color: var(--color-danger); /* Твой красный цвет */
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(229, 62, 62, 0.3); /* Красноватая тень для объема */
+  z-index: 9999; /* Поверх всего */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 350px;
+  
+  /* Плавная анимация выезда справа */
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.error-toast p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Кнопка закрытия (крестик) внутри тоста */
+.error-toast button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.error-toast button:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Анимация появления */
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+📱 RESPONSIVE (Мобильная версия)
+============================================ */
+@media (max-width: 600px) {
+  .friend-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .friend-actions {
+    width: 100%;
+  }
+  
+  .friend-actions button {
+    flex: 1;
+  }
+
+  .search-form {
+    flex-direction: column;
+  }
+  
+  .friends-tabs {
+    gap: 4px;
+  }
+  
+  .friends-tab {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .tab-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+}
+
+/* ============================================
 📱 RESPONSIVE
 ============================================ */
 @media (max-width: 768px) {

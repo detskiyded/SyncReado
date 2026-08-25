@@ -11,6 +11,8 @@ import * as path from "node:path";
 import { bookmarkRouter } from "./routes/bookmarkRouter";
 import { friendRouter } from "./routes/friendRouter";
 import { userRouter } from "./routes/userRouter";
+import { createServer } from "http";
+import { initSocket } from "./socket";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,7 +42,9 @@ app.get("/api/health", (req: Request, res: Response) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
-  console.log(`http://localhost:${PORT}/api/health`);
-});
+const httpServer = createServer(app);
+initSocket(httpServer);
+
+httpServer.listen(PORT, () => {
+  console.log(`Сервер запущен на http://localhost:${PORT}`);
+})

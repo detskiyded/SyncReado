@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { connectSocket, disconnectSocket } from "../utils/socket";
 
 export function Layout() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -13,6 +14,11 @@ export function Layout() {
   };
 
   const closeMenu = () => setIsMenuOpen(false);
+
+  useEffect(() => {
+    connectSocket();
+    return disconnectSocket;
+  }, []);
 
   return (
     <div className="app-layout">

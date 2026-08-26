@@ -1,4 +1,4 @@
-import { AuthRequest } from "./bookController";
+import { AuthRequest } from "../types/auth";
 import { Response, NextFunction } from "express";
 import { prisma } from "../db/client";
 

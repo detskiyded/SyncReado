@@ -1,11 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { prisma } from "../db/client";
+import { AuthRequest } from "../types/auth";
 
 import { JwtPayload } from "jsonwebtoken";
-
-export interface AuthRequest extends Request {
-  user?: JwtPayload & { userId: string };
-}
 
 async function setProgress(
   req: AuthRequest,

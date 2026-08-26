@@ -1,13 +1,12 @@
 import { Response, Request, NextFunction } from "express";
 import { prisma } from "../db/client";
 import * as fs from "fs/promises";
+import { AuthRequest } from "../types/auth";
 
 import { JwtPayload } from "jsonwebtoken";
 import path from "path";
 
-export interface AuthRequest extends Request {
-  user?: JwtPayload & { userId: string };
-}
+
 
 async function createBook(req: AuthRequest, res: Response, next: NextFunction) {
   if (!req.file) {

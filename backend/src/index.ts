@@ -13,6 +13,7 @@ import { friendRouter } from "./routes/friendRouter";
 import { userRouter } from "./routes/userRouter";
 import { createServer } from "http";
 import { initSocket } from "./socket";
+import { roomRouter } from "./routes/roomRouter";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,6 +32,7 @@ app.use("/books", authMiddleware, progressRouter);
 app.use("/books", authMiddleware, bookRouter);
 app.use("/friends", authMiddleware, friendRouter);
 app.use("/users", authMiddleware, userRouter);
+app.use("/rooms", authMiddleware, roomRouter);
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 

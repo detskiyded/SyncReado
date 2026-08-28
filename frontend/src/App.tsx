@@ -8,6 +8,7 @@ import { UploadBook } from "./pages/UploadBook";
 import { Reader } from "./pages/Reader";
 import { Friends } from "./pages/Friends";
 import { Rooms } from "./pages/Rooms";
+import { RoomPage } from "./pages/RoomPage";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/upload" element={<UploadBook />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/rooms" element={<Rooms />} />
+        <Route path="/room/:roomId" element={<RoomPage/>} />
       </Route>
 
       {/* Ридер - иммерсивный */}

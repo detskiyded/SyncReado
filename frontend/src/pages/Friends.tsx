@@ -9,7 +9,7 @@ export function Friends() {
   const [outgoing, setOutgoing] = useState<FriendRequest[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<FriendUser[]>([]);
-  const [sentIds, setSentIds] = useState<string[]>([]);
+  const [_, setSentIds] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 

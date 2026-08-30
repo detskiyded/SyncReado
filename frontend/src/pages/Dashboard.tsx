@@ -42,6 +42,12 @@ export function Dashboard() {
 
   return (
     <div className="dashboard-layout">
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">📚 Книги</h1>
+        <button className="btn-primary" onClick={() => navigate("/upload")}>
+            + Добавить книгу
+        </button>
+      </div>
       {isLoading ? (
         <div className="loader">Загрузка книг...</div>
       ) : errorMsg ? (

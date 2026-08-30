@@ -51,9 +51,6 @@ export function Layout() {
         </nav>
 
         <div className="header-actions">
-          <button className="btn-primary" onClick={() => navigate("/upload")}>
-            + Добавить книгу
-          </button>
           <button className="logout-button" onClick={handleLogout}>
             Выйти
           </button>

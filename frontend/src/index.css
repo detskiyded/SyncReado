@@ -282,6 +282,7 @@ h3,
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 10px;
 }
 
 .form-group label {
@@ -1165,9 +1166,9 @@ input[type="file"] {
 👥 FRIENDS LAYOUT
 ============================================ */
 .friends-layout {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 24px 20px;
   min-height: 100vh;
 }
 
@@ -1414,23 +1415,191 @@ input[type="file"] {
 }
 
 /* ============================================
-📱 RESPONSIVE
+🚪 ROOMS — страница списка комнат
 ============================================ */
-@media (max-width: 768px) {
-  .app-nav {
-    display: none;
-  }
-  .burger-button {
-    display: block;
-  }
-  .header-actions .btn-primary,
-  .header-actions .logout-button {
-    display: none;
-  }
-  .app-content {
-    padding: 16px 12px;
-  }
+.rooms-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
+
+.rooms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rooms-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d3748);
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Карточка комнаты */
+.room-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.room-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-icon {
+  font-size: 1.4rem;
+}
+
+.room-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d3748);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-book {
+  font-size: 0.9rem;
+  color: var(--color-text-light, #718096);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Жёлтый бейдж со счётчиком участников */
+.room-members-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-yellow, #ffc81e);
+  color: var(--color-text-main, #2d3748);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* ============================================
+🚪 ROOM PAGE — страница комнаты
+============================================ */
+.room-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.room-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  padding-bottom: 16px;
+}
+
+.room-page-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-text-main, #2d3748);
+}
+
+.room-page-book {
+  font-size: 0.95rem;
+  color: var(--color-text-light, #718096);
+}
+
+.room-invite-block h2,
+.room-members-block h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d3748);
+  margin-bottom: 12px;
+}
+
+/* Инвайт-ссылка: инпут + кнопка в одну строку */
+.invite-link-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.invite-link-row .form-input {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--color-cream, #fefddf);
+  color: var(--color-text-light, #718096);
+  font-size: 0.85rem;
+}
+
+/* Голубые чипы участников */
+.room-members-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.member-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(115, 165, 202, 0.15);
+  border: 1px solid var(--color-blue, #73a5ca);
+  color: var(--color-text-main, #2d3748);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+/* ============================================
+🔗 JOIN ROOM — транзит по инвайт-ссылке
+============================================ */
+.join-room-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 20px;
+}
+
+.join-room-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-light, #718096);
+}
+
 
 /* ============================================
 📱 КОМПАКТНАЯ ШАПКА РИДЕРА (мобильные)
@@ -1477,4 +1646,31 @@ input[type="file"] {
   .pdf-wrapper {
     padding: 12px 8px;
   }
+
+  .rooms-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .invite-link-row {
+    flex-direction: column;
+  }
+
+  .room-page {
+    padding: 20px;
+  }
+
+  .app-nav {
+    display: none;
+  }
+  .burger-button {
+    display: block;
+  }
+  .header-actions .btn-primary,
+  .header-actions .logout-button {
+    display: none;
+  }
+  .app-content {
+    padding: 16px 12px;
+  }  
 }

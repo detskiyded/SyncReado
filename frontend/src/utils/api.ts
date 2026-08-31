@@ -30,7 +30,7 @@ export async function request(
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.error || "Error");
+    throw new Error(errorData.err || "Error");
   }
 
   return await response.json();

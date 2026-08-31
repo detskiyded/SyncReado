@@ -86,18 +86,20 @@ export function Rooms() {
       {/* Шапка */}
       <div className="rooms-header">
         <h1 className="rooms-title">🚪 Комнаты</h1>
-        <button
-          className="btn-primary"
-          onClick={() => setIsJoinModalOpen(true)}
-        >
-          🔑 Вступить
-        </button>
-        <button
-          className="btn-primary"
-          onClick={() => setIsCreateModalOpen(true)}
-        >
-          + Создать комнату
-        </button>
+        <div className="rooms-actions">
+          <button
+            className="btn-primary"
+            onClick={() => setIsJoinModalOpen(true)}
+          >
+            🔑 Вступить
+          </button>
+          <button
+            className="btn-primary"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            + Создать комнату
+          </button>
+        </div>
       </div>
 
       {/* Контент: только загрузка / пусто / список */}

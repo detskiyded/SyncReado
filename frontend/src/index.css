@@ -1605,6 +1605,57 @@ input[type="file"] {
   color: var(--color-text-light, #718096);
 }
 
+/* ============================================
+👥 PRESENCE — кто сейчас читает
+============================================ */
+.presence-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.presence-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.presence-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-blue, #73a5ca);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-white, #ffffff);
+  margin-left: -8px; /* наезд друг на друга */
+}
+
+.presence-avatar:first-child {
+  margin-left: 0;
+}
+
+/* Ты — оранжевый */
+.presence-avatar.me {
+  background-color: var(--color-orange, #e87f24);
+}
+
+.presence-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-light, #718096);
+}
+
+/* На мобильных прячем счётчик, оставляем аватарки */
+@media (max-width: 768px) {
+  .presence-count {
+    display: none;
+  }
+}
+
 
 /* ============================================
 📱 КОМПАКТНАЯ ШАПКА РИДЕРА (мобильные)

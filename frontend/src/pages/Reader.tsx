@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { request } from "../utils/api";
 import { useParams } from "react-router-dom";
 import type { Book } from "../types/book";
@@ -11,6 +11,7 @@ import type { OnItemClickArgs } from "react-pdf/src/shared/types.js";
 import type { Bookmark } from "../types/bookmark";
 import { BookmarkSidebar } from "../components/BookmarkSidebar";
 import { Modal } from "../components/Modal";
+import { connectSocket, disconnectSocket, getSocket } from "../utils/socket";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -29,7 +30,46 @@ export function Reader() {
   const [isNoteModalOpen, setIsNoteModalOpen] = useState<boolean>(false);
   const [noteDraft, setNoteDraft] = useState<string>("");
 
-  // 🆕 Адаптивная ширина страницы
+  const [searchParams] = useSearchParams();
+  const roomId = searchParams.get("room");
+  const [activeReaders, setActiveReaders] = useState<
+    { userId: string; email: string }[]
+  >([]);
+
+  useEffect(() => {
+    connectSocket();
+    return () => disconnectSocket();
+  },[])
+
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket || !roomId) return;
+
+    const handleRoomUsers = (users: { userId: string; email: string }[]) =>
+      setActiveReaders(users);
+
+    const handleUserJoined = (user: { userId: string; email: string }) =>
+      setActiveReaders((prev) =>
+        prev.some((u) => u.userId === user.userId) ? prev : [...prev, user],
+      );
+
+    const handleUserLeft = (user: { userId: string; email: string }) =>
+      setActiveReaders((prev) => prev.filter((u) => u.userId !== user.userId));
+
+    socket.on("room-users", handleRoomUsers);
+    socket.on("user-joined", handleUserJoined);
+    socket.on("user-left", handleUserLeft);
+    socket.emit("join-room", roomId);
+
+    return () => {
+      socket.off("room-users", handleRoomUsers);
+      socket.off("user-joined", handleUserJoined);
+      socket.off("user-left", handleUserLeft);
+      socket.emit("leave-room", roomId);
+    };
+  }, [roomId]);
+
+  // Адаптивная ширина страницы
   const [pageWidth, setPageWidth] = useState<number>(600);
   const pdfWrapperRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,22 +78,20 @@ export function Reader() {
 
   const timeRef = useRef<number | null>(null);
 
-  // 🆕 Пересчёт ширины при монтировании и при ресайзе окна
-// Пересчёт ширины при монтировании и при ресайзе окна
-useEffect(() => {
-  function updatePageWidth() {
-    const wrapper = pdfWrapperRef.current;
-    if (!wrapper) return;
+  // Пересчёт ширины при монтировании и при ресайзе окна
+  useEffect(() => {
+    function updatePageWidth() {
+      const wrapper = pdfWrapperRef.current;
+      if (!wrapper) return;
 
-    // Берём ФАКТИЧЕСКИЕ горизонтальные паддинги обёртки,
-    // а не хардкод: на мобильном это 8px по бокам, на десктопе 20px
-    const styles = window.getComputedStyle(wrapper);
-    const horizontalPadding =
-     parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight);
+      // Берём ФАКТИЧЕСКИЕ горизонтальные паддинги обёртки
+      const styles = window.getComputedStyle(wrapper);
+      const horizontalPadding =
+        parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight);
 
-    const available = wrapper.clientWidth - horizontalPadding;
-    setPageWidth(Math.max(280, Math.min(available, 900)));
-   }
+      const available = wrapper.clientWidth - horizontalPadding;
+      setPageWidth(Math.max(280, Math.min(available, 900)));
+    }
 
     updatePageWidth();
     window.addEventListener("resize", updatePageWidth);
@@ -224,6 +262,27 @@ useEffect(() => {
         </button>
 
         <div className="reader-title">{bookTitle}</div>
+
+        {activeReaders.length > 0 && (
+          <div
+            className="presence-indicator"
+            title={`Сейчас читают: ${activeReaders.map((u) => u.email).join(", ")}`}
+          >
+            <div className="presence-avatars">
+              {/* Ты сам */}
+              <span className="presence-avatar me">Я</span>
+              {/* Остальные в комнате */}
+              {activeReaders.map((reader) => (
+                <span key={reader.userId} className="presence-avatar">
+                  {reader.email[0].toUpperCase()}
+                </span>
+              ))}
+            </div>
+            <span className="presence-count">
+              👥 {activeReaders.length + 1}
+            </span>
+          </div>
+        )}
 
         <div className="reader-controls">
           <button

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Room } from "../types/room";
 import { request } from "../utils/api";
 
@@ -9,6 +9,8 @@ export function RoomPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  const nav = useNavigate();
 
   useEffect(() => {
     async function loadRoom() {
@@ -84,8 +86,8 @@ export function RoomPage() {
       </div>
 
       {/* Переход в ридер */}
-      <button className="btn-primary">
-        {/* TODO: читать вместе (navigate в ридер с ?room=) */}
+      <button className="btn-primary"
+      onClick={() => nav(`/reader/${room.bookId}?room=${room.id}`)}>
         📖 Читать вместе
       </button>
     </div>

@@ -67,6 +67,15 @@ export function initSocket(httpServer: HttpServer){
       }
     });
 
+    socket.on('page-change', async ({roomId, pageNumber}) => {
+      const userId = socket.data.user.userId;
+      const isMember = await prisma.roomMember.findFirst({where: {roomId, userId}});
+      if (!isMember) return;
+
+      const roomName = `room-${roomId}`;
+      socket.to(roomName).emit('page-change', {user: socket.data.user, pageNumber});
+    });
+
     socket.on('disconnect', (reason) => {
       console.log('user ', socket.data.user.userId, ' disconnected. reason: ', reason);      
     });

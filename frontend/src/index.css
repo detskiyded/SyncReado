@@ -1638,7 +1638,7 @@ input[type="file"] {
   margin-left: 0;
 }
 
-/* Ты — оранжевый */
+/* Ты - оранжевый */
 .presence-avatar.me {
   background-color: var(--color-orange, #e87f24);
 }
@@ -1656,6 +1656,191 @@ input[type="file"] {
   }
 }
 
+/* ============================================
+ READERS BUBBLE — плавающий пузырь
+============================================ */
+.readers-bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 10px;
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.readers-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2);
+}
+
+.bubble-avatars {
+  display: flex;
+}
+
+.bubble-avatars .presence-avatar {
+  margin-left: -8px;
+}
+
+.bubble-avatars .presence-avatar:first-child {
+  margin-left: 0;
+}
+
+.bubble-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d3748);
+}
+
+/* ============================================
+📋 READERS PANEL — боковая панель читателей
+============================================ */
+.readers-panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 450;
+}
+
+.readers-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 420px;
+  max-width: 90vw;
+  background-color: var(--color-white, #ffffff);
+  border-left: 1px solid var(--border-color, #e5e7eb);
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.12);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+.readers-panel.open {
+  transform: translateX(0);
+}
+
+.readers-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.readers-panel-header h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text-main, #2d3748);
+}
+
+.panel-close {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--color-text-light, #718096);
+}
+
+.readers-panel-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reader-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px;
+  background-color: var(--color-cream, #fefddf);
+}
+
+.reader-row.me {
+  border-color: var(--color-orange, #e87f24);
+}
+
+.reader-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.reader-row-email {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-main, #2d3748);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reader-row-page {
+  font-size: 0.75rem;
+  color: var(--color-text-light, #718096);
+}
+
+/* Лента событий внизу панели */
+.readers-panel-events {
+  border-top: 1px solid var(--border-color, #e5e7eb);
+  padding: 14px 20px;
+  max-height: 180px;
+  overflow-y: auto;
+  background-color: var(--color-cream, #fefddf);
+}
+
+.readers-panel-events h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-main, #2d3748);
+  margin-bottom: 8px;
+}
+
+.events-empty {
+  font-size: 0.8rem;
+  color: var(--color-text-light, #718096);
+}
+
+.event-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--color-text-main, #2d3748);
+  padding: 4px 0;
+}
+
+.event-time {
+  color: var(--color-text-light, #718096);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+/* Мобильные: пузырь компактнее */
+@media (max-width: 768px) {
+  .readers-bubble {
+    bottom: 16px;
+    right: 16px;
+    padding: 8px 12px 8px 8px;
+  }
+}
 
 /* ============================================
 📱 КОМПАКТНАЯ ШАПКА РИДЕРА (мобильные)

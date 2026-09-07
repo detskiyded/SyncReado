@@ -15,6 +15,12 @@ import { connectSocket, disconnectSocket, getSocket } from "../utils/socket";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
+type ReaderWithPage = {
+  userId: string;
+  email: string;
+  currentPage?: number;
+};
+
 export function Reader() {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
@@ -32,39 +38,68 @@ export function Reader() {
 
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("room");
-  const [activeReaders, setActiveReaders] = useState<
-    { userId: string; email: string }[]
+  const [activeReadersWithPages, setActiveReadersWithPages] = useState<
+    ReaderWithPage[]
   >([]);
+  const [isReadersPanelOpen, setIsReadersPanelOpen] = useState<boolean>(false);
+
 
   useEffect(() => {
     connectSocket();
     return () => disconnectSocket();
-  },[])
+  }, []);
 
   useEffect(() => {
     const socket = getSocket();
     if (!socket || !roomId) return;
 
+    // Сервер прислал готовый список - добавляем каждому поле currentPage
     const handleRoomUsers = (users: { userId: string; email: string }[]) =>
-      setActiveReaders(users);
-
-    const handleUserJoined = (user: { userId: string; email: string }) =>
-      setActiveReaders((prev) =>
-        prev.some((u) => u.userId === user.userId) ? prev : [...prev, user],
+      setActiveReadersWithPages(
+        users.map((u) => ({ ...u, currentPage: undefined })),
       );
 
+    // Кто-то зашёл - добавляем с неизвестной страницей
+    const handleUserJoined = (user: { userId: string; email: string }) =>
+      setActiveReadersWithPages((prev) =>
+        prev.some((u) => u.userId === user.userId)
+          ? prev
+          : [...prev, { ...user, currentPage: undefined }],
+      );
+
+    // Кто-то вышел - убираем из списка
     const handleUserLeft = (user: { userId: string; email: string }) =>
-      setActiveReaders((prev) => prev.filter((u) => u.userId !== user.userId));
+      setActiveReadersWithPages((prev) =>
+        prev.filter((u) => u.userId !== user.userId),
+      );
+
+    // Друг перелистнул страницу - обновляем ТОЛЬКО его запись
+    const handlePageChange = (data: {
+      user: { userId: string; email: string };
+      pageNumber: number;
+    }) => {
+      setActiveReadersWithPages((prev) =>
+        prev.map((u) =>
+          u.userId === data.user.userId
+            ? { ...u, currentPage: data.pageNumber }
+            : u,
+        )
+      );
+    }
 
     socket.on("room-users", handleRoomUsers);
     socket.on("user-joined", handleUserJoined);
     socket.on("user-left", handleUserLeft);
+    socket.on("page-change", handlePageChange);
+
+    // Заходим в комнату
     socket.emit("join-room", roomId);
 
     return () => {
       socket.off("room-users", handleRoomUsers);
       socket.off("user-joined", handleUserJoined);
       socket.off("user-left", handleUserLeft);
+      socket.off("page-change", handlePageChange);
       socket.emit("leave-room", roomId);
     };
   }, [roomId]);
@@ -165,6 +200,12 @@ export function Reader() {
     }, 2000);
   }
 
+  function sendPageChangeNotification(newPage: number) {
+    const socket = getSocket();
+    if (socket && roomId !== null)
+      socket.emit("page-change", { roomId, pageNumber: newPage });
+  }
+
   function handlePageInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setInputPage(value);
@@ -174,6 +215,7 @@ export function Reader() {
     if (!isNaN(pageNum) && numPages && pageNum >= 1 && pageNum <= numPages) {
       setPageNumber(pageNum);
       saveProgressDelayed(pageNum);
+      sendPageChangeNotification(pageNum);
     }
   }
 
@@ -191,6 +233,7 @@ export function Reader() {
       setPageNumber((prev) => prev - 1);
       setInputPage((pageNumber - 1).toString());
       saveProgressDelayed(pageNumber - 1);
+      sendPageChangeNotification(pageNumber - 1);
     }
   }
 
@@ -199,12 +242,14 @@ export function Reader() {
       setPageNumber((prev) => prev + 1);
       setInputPage((pageNumber + 1).toString());
       saveProgressDelayed(pageNumber + 1);
+      sendPageChangeNotification(pageNumber + 1);
     }
   }
 
   function onDocumentClick(onDocProps: OnItemClickArgs) {
     setPageNumber(onDocProps.pageNumber);
     setInputPage(onDocProps.pageNumber.toString());
+    sendPageChangeNotification(onDocProps.pageNumber);
   }
 
   async function handleAddBookmark() {
@@ -238,181 +283,244 @@ export function Reader() {
   }
 
   return (
-    <div className="reader-container">
-      <div className="reader-header">
-        <button
-          className="btn-secondary"
-          onClick={() => navigate("/dashboard")}
-        >
-          ← <span className="btn-label">Назад</span>
-        </button>
-
-        <button
-          className="btn-secondary"
-          onClick={() => setIsSidebarOpen((prev) => !prev)}
-        >
-          🔖 <span className="btn-label">Закладки</span>
-        </button>
-
-        <button
-          className="btn-secondary"
-          onClick={() => setIsNoteModalOpen(true)}
-        >
-          + 🔖
-        </button>
-
-        <div className="reader-title">{bookTitle}</div>
-
-        {activeReaders.length > 0 && (
-          <div
-            className="presence-indicator"
-            title={`Сейчас читают: ${activeReaders.map((u) => u.email).join(", ")}`}
-          >
-            <div className="presence-avatars">
-              {/* Ты сам */}
-              <span className="presence-avatar me">Я</span>
-              {/* Остальные в комнате */}
-              {activeReaders.map((reader) => (
-                <span key={reader.userId} className="presence-avatar">
-                  {reader.email[0].toUpperCase()}
-                </span>
-              ))}
-            </div>
-            <span className="presence-count">
-              👥 {activeReaders.length + 1}
-            </span>
-          </div>
-        )}
-
-        <div className="reader-controls">
-          <button
-            className="btn-secondary"
-            onClick={handlePrevPage}
-            disabled={pageNumber <= 1 || isLoading}
-          >
-            ← <span className="btn-label">Пред.</span>
-          </button>
-
-          <div className="page-input-wrapper">
-            <input
-              type="number"
-              min={1}
-              max={numPages || 999}
-              value={inputPage}
-              onChange={handlePageInputChange}
-              className="page-number-input"
-              disabled={!numPages}
-            />
-            <span className="page-separator">/</span>
-            <span className="total-pages">{numPages || "?"}</span>
-          </div>
-
-          <button
-            className="btn-secondary"
-            onClick={handleNextPage}
-            disabled={!numPages || pageNumber >= numPages || isLoading}
-          >
-            <span className="btn-label">След.</span> →
-          </button>
-        </div>
-      </div>
-
-      {/* 🆕 ref для измерения ширины */}
-      <div className="pdf-wrapper" ref={pdfWrapperRef}>
-        {isLoading ? (
-          <div className="loader">Загружаем книгу...</div>
-        ) : errorMsg ? (
-          <div className="error-container">
-            <p>⚠️ {errorMsg}</p>
-            <button
-              className="btn-primary"
-              onClick={() => navigate("/dashboard")}
-            >
-              Вернуться к книгам
-            </button>
-          </div>
-        ) : fileUrl ? (
-          <Document
-            file={fileUrl}
-            onLoadSuccess={onDocumentLoadSuccess}
-            onLoadError={onDocumentLoadError}
-            onItemClick={onDocumentClick}
-          >
-            <Page
-              pageNumber={pageNumber}
-              width={pageWidth}
-              renderTextLayer={true}
-            />
-          </Document>
-        ) : (
-          <div className="error-container">
-            <p>Ссылка на файл не найдена</p>
-          </div>
-        )}
-      </div>
-
-      <BookmarkSidebar
-        bookmarks={bookmarks}
-        isOpen={isSidebarOpen}
-        currentPage={pageNumber}
-        onClose={() => setIsSidebarOpen(false)}
-        onBookmarkClick={(page) => {
-          setPageNumber(page);
-          setInputPage(page.toString());
-          setIsSidebarOpen(false);
-        }}
-        onBookmarkDelete={(id) => {
-          setBookmarks((prev) => prev.filter((b) => b.id !== id));
-        }}
-      />
-
-      <Modal
-        isOpen={isNoteModalOpen}
-        onClose={() => setIsNoteModalOpen(false)}
-        title="Добавить закладку"
+  <div className="reader-container">
+    <div className="reader-header">
+      <button
+        className="btn-secondary"
+        onClick={() => navigate("/dashboard")}
       >
-        <div className="form-group">
-          <label htmlFor="bookmark-note">Заметка (опционально)</label>
-          <textarea
-            id="bookmark-note"
-            className="form-input"
-            value={noteDraft}
-            onChange={(e) => setNoteDraft(e.target.value)}
-            placeholder="Например: самый интересный момент в главе"
-            rows={3}
-            maxLength={250}
-            style={{ resize: "vertical" }}
+        ← <span className="btn-label">Назад</span>
+      </button>
+
+      <button
+        className="btn-secondary"
+        onClick={() => setIsSidebarOpen((prev) => !prev)}
+      >
+        🔖 <span className="btn-label">Закладки</span>
+      </button>
+
+      <button
+        className="btn-secondary"
+        onClick={() => setIsNoteModalOpen(true)}
+      >
+        + 🔖
+      </button>
+
+      <div className="reader-title">{bookTitle}</div>
+
+      <div className="reader-controls">
+        <button
+          className="btn-secondary"
+          onClick={handlePrevPage}
+          disabled={pageNumber <= 1 || isLoading}
+        >
+          ← <span className="btn-label">Пред.</span>
+        </button>
+
+        <div className="page-input-wrapper">
+          <input
+            type="number"
+            min={1}
+            max={numPages || 999}
+            value={inputPage}
+            onChange={handlePageInputChange}
+            className="page-number-input"
+            disabled={!numPages}
           />
+          <span className="page-separator">/</span>
+          <span className="total-pages">{numPages || "?"}</span>
         </div>
 
-        <p
-          style={{
-            color: "var(--color-text-light, #718096)",
-            fontSize: "0.9rem",
-            marginBottom: "20px",
-          }}
+        <button
+          className="btn-secondary"
+          onClick={handleNextPage}
+          disabled={!numPages || pageNumber >= numPages || isLoading}
         >
-          Страница: <strong>{pageNumber}</strong>
-        </p>
+          <span className="btn-label">След.</span> →
+        </button>
+      </div>
+    </div>
 
-        <div
-          style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}
-        >
-          <button
-            className="btn-secondary"
-            onClick={() => setIsNoteModalOpen(false)}
-          >
-            Отмена
-          </button>
+    {/* ref для измерения ширины */}
+    <div className="pdf-wrapper" ref={pdfWrapperRef}>
+      {isLoading ? (
+        <div className="loader">Загружаем книгу...</div>
+      ) : errorMsg ? (
+        <div className="error-container">
+          <p>⚠️ {errorMsg}</p>
           <button
             className="btn-primary"
-            onClick={handleAddBookmark}
-            disabled={isAddingBookmark}
+            onClick={() => navigate("/dashboard")}
           >
-            {isAddingBookmark ? "Сохранение..." : "Сохранить"}
+            Вернуться к книгам
           </button>
         </div>
-      </Modal>
+      ) : fileUrl ? (
+        <Document
+          file={fileUrl}
+          onLoadSuccess={onDocumentLoadSuccess}
+          onLoadError={onDocumentLoadError}
+          onItemClick={onDocumentClick}
+        >
+          <Page
+            pageNumber={pageNumber}
+            width={pageWidth}
+            renderTextLayer={true}
+          />
+        </Document>
+      ) : (
+        <div className="error-container">
+          <p>Ссылка на файл не найдена</p>
+        </div>
+      )}
     </div>
-  );
+
+    <BookmarkSidebar
+      bookmarks={bookmarks}
+      isOpen={isSidebarOpen}
+      currentPage={pageNumber}
+      onClose={() => setIsSidebarOpen(false)}
+      onBookmarkClick={(page) => {
+        setPageNumber(page);
+        setInputPage(page.toString());
+        setIsSidebarOpen(false);
+      }}
+      onBookmarkDelete={(id) => {
+        setBookmarks((prev) => prev.filter((b) => b.id !== id));
+      }}
+    />
+
+    <Modal
+      isOpen={isNoteModalOpen}
+      onClose={() => setIsNoteModalOpen(false)}
+      title="Добавить закладку"
+    >
+      <div className="form-group">
+        <label htmlFor="bookmark-note">Заметка (опционально)</label>
+        <textarea
+          id="bookmark-note"
+          className="form-input"
+          value={noteDraft}
+          onChange={(e) => setNoteDraft(e.target.value)}
+          placeholder="Например: самый интересный момент в главе"
+          rows={3}
+          maxLength={250}
+          style={{ resize: "vertical" }}
+        />
+      </div>
+
+      <p
+        style={{
+          color: "var(--color-text-light, #718096)",
+          fontSize: "0.9rem",
+          marginBottom: "20px",
+        }}
+      >
+        Страница: <strong>{pageNumber}</strong>
+      </p>
+
+      <div
+        style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}
+      >
+        <button
+          className="btn-secondary"
+          onClick={() => setIsNoteModalOpen(false)}
+        >
+          Отмена
+        </button>
+        <button
+          className="btn-primary"
+          onClick={handleAddBookmark}
+          disabled={isAddingBookmark}
+        >
+          {isAddingBookmark ? "Сохранение..." : "Сохранить"}
+        </button>
+      </div>
+    </Modal>
+
+    {/* Плавающий пузырь: кто сейчас читает */}
+    {roomId && (
+      <button
+        className="readers-bubble"
+        onClick={() => setIsReadersPanelOpen((prev) => !prev)}
+        title="Кто сейчас читает"
+      >
+        <div className="bubble-avatars">
+          <span className="presence-avatar me">Я</span>
+          {activeReadersWithPages.slice(0, 2).map((reader) => (
+            <span key={reader.userId} className="presence-avatar">
+              {reader.email[0].toUpperCase()}
+            </span>
+          ))}
+        </div>
+        <span className="bubble-count">
+          👥 {activeReadersWithPages.length + 1}
+        </span>
+      </button>
+    )}
+
+    {/* Подложка: клик вне панели закрывает её */}
+    {isReadersPanelOpen && (
+      <div
+        className="readers-panel-overlay"
+        onClick={() => setIsReadersPanelOpen(false)}
+      />
+    )}
+
+    {/* Боковая панель читателей */}
+    {roomId && (
+      <div className={`readers-panel ${isReadersPanelOpen ? "open" : ""}`}>
+        <div className="readers-panel-header">
+          <h3>👥 Читают сейчас</h3>
+          <button
+            className="panel-close"
+            onClick={() => setIsReadersPanelOpen(false)}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Список читателей */}
+        <div className="readers-panel-list">
+          {/* Ты сам */}
+          <div className="reader-row me">
+            <span className="presence-avatar me">Я</span>
+            <div className="reader-row-info">
+              <span className="reader-row-email">Ты</span>
+              <span className="reader-row-page">стр. {pageNumber}</span>
+            </div>
+          </div>
+
+          {/* Остальные в комнате */}
+          {activeReadersWithPages.map((reader) => (
+            <div key={reader.userId} className="reader-row">
+              <span className="presence-avatar">
+                {reader.email[0].toUpperCase()}
+              </span>
+              <div className="reader-row-info">
+                <span className="reader-row-email">{reader.email}</span>
+                <span className="reader-row-page">
+                  {reader.currentPage
+                    ? `стр. ${reader.currentPage}`
+                    : "страница неизвестна"}
+                </span>
+              </div>
+              {reader.currentPage && (
+                <button
+                  className="btn-secondary"
+                  onClick={() => {
+                    setPageNumber(reader.currentPage!);
+                    setInputPage(String(reader.currentPage));
+                  }}
+                >
+                  Перейти
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+);
 }
